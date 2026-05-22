@@ -1,0 +1,56 @@
+---
+title: what fuzzing a side project taught me about my own assumptions
+date: 2026-03-11
+tag: field-notes
+readingTime: 9
+excerpt: i thought my input validation was thorough. one afternoon with a fuzzer disagreed, politely and at length.
+draft: false
+---
+
+I built a small parser for a config format nobody asked for, and I was proud of
+its input validation. It rejected malformed input with clear error messages. It
+had tests. I pointed a fuzzer at it mostly to feel good about myself.
+
+That is not what happened.
+
+## the first crash, within seconds
+
+The fuzzer found a panic before I'd finished making coffee. The input was a
+single line of `[` characters — an unterminated nested section, repeated until
+my recursive descent parser blew the stack.
+
+I had a test for unterminated sections. I did not have a test for *deeply
+nested* unterminated sections, because when I wrote the tests I was thinking
+about what a *human* would type wrong, not what an adversary — or a fuzzer with
+no taste — would produce.
+
+## assumptions, enumerated
+
+The crashes clustered into a few categories, and each one mapped cleanly to an
+assumption I hadn't known I was making:
+
+- **"keys are short."** A megabyte-long key name overflowed a fixed buffer I'd
+  sized for "reasonable" input.
+- **"numbers fit in the type I picked."** A value like `99999999999999999999`
+  parsed fine right up until it didn't.
+- **"valid utf-8 in means valid utf-8 through."** A byte sequence that was
+  valid as input became invalid after my own normalization pass mangled it.
+- **"the empty case is the boring case."** Several functions assumed at least
+  one element. The empty input wasn't in my test matrix at all.
+
+## the meta-lesson
+
+Every one of those is a place where I'd validated against my *imagination* of
+bad input instead of against the actual space of possible bytes. My tests
+encoded the failures I could think of. The fuzzer didn't think — it just tried
+things — and that turned out to be the whole advantage.
+
+I've started keeping a corpus. Every crash the fuzzer finds becomes a regression
+test, so the same input can never embarrass me twice. The corpus is now larger
+than the hand-written test suite, which tells you something about whose
+imagination was more thorough.
+
+The parser still doesn't do anything useful. But it no longer falls over when
+someone breathes on it wrong, and I trust it in a way I didn't before — not
+because I convinced myself it was correct, but because something genuinely tried
+to break it and mostly failed.

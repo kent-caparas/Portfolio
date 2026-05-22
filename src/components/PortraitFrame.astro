@@ -1,0 +1,88 @@
+---
+interface Props {
+  imgSrc?: string;
+  alt?: string;
+  caption?: string;
+  fig?: string;
+}
+
+const {
+  imgSrc,
+  alt = 'portrait',
+  caption = 'the operator',
+  fig = '[fig.01]',
+} = Astro.props;
+---
+
+<div class="portrait">
+  <div class="portrait-frame" class:list={{ 'has-img': imgSrc }}>
+    {imgSrc && <img src={imgSrc} alt={alt} />}
+  </div>
+  <div class="portrait-caption"><span class="fig">{fig}</span> {caption}</div>
+</div>
+
+<style>
+  .portrait {
+    position: relative;
+  }
+
+  .portrait-frame {
+    width: 180px;
+    height: 220px;
+    background:
+      linear-gradient(135deg, rgba(138, 42, 42, 0.04), rgba(138, 42, 42, 0) 60%),
+      repeating-linear-gradient(
+        45deg,
+        var(--color-bg-soft) 0px,
+        var(--color-bg-soft) 8px,
+        var(--color-line) 8px,
+        var(--color-line) 9px
+      );
+    border: 1px solid var(--color-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-ink-faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* dashed inner border + placeholder label, only when no image */
+  .portrait-frame:not(.has-img)::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px dashed var(--color-ink-faint);
+    opacity: 0.4;
+  }
+
+  .portrait-frame:not(.has-img)::after {
+    content: '[ portrait ]';
+    position: relative;
+    z-index: 1;
+  }
+
+  .portrait-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .portrait-caption {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--color-ink-faint);
+    letter-spacing: 0.1em;
+    margin-top: 8px;
+    text-transform: uppercase;
+  }
+
+  .portrait-caption .fig {
+    color: var(--color-accent);
+  }
+</style>

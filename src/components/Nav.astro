@@ -1,0 +1,65 @@
+---
+export interface NavLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  links?: NavLink[];
+}
+
+const defaultLinks: NavLink[] = [
+  { label: 'logs', href: '/blog' },
+  { label: 'builds', href: '/projects' },
+  { label: 'about', href: '/#about' },
+  { label: 'contact', href: '/#contact' },
+];
+
+const { links = defaultLinks } = Astro.props;
+const current = Astro.url.pathname;
+---
+
+<nav>
+  {
+    links.map((link) => (
+      <a
+        href={link.href}
+        aria-current={current === link.href ? 'page' : undefined}
+      >
+        {link.label}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  nav {
+    display: flex;
+    gap: 24px;
+    margin-top: 28px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+
+  a {
+    color: var(--color-ink-dim);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+  }
+
+  a::before {
+    content: '> ';
+    color: var(--color-ink-faint);
+  }
+
+  a:hover,
+  a[aria-current='page'] {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+</style>

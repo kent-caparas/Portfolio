@@ -1,0 +1,68 @@
+---
+title: reverse-engineering the damage formula in a 2003 jrpg
+date: 2026-04-28
+tag: teardown
+readingTime: 12
+excerpt: spent a weekend in a hex editor figuring out why crit chance felt off. turns out the rng was lying to me. so was i.
+draft: false
+---
+
+I have replayed this particular game enough times that I trust my own gut over
+the wiki. And my gut said the crit rate was wrong. Not *unlucky* — wrong. So I
+spent a weekend with a memory viewer and a notebook trying to prove it.
+
+## the setup
+
+The game runs fine in an emulator with a debugger attached, which means I could
+freeze the frame, dump RAM, and watch values change between turns. The first
+job was finding where damage gets computed. I parked a write-breakpoint on the
+enemy HP address and let it trip.
+
+```text
+HP addr: 0x02_1A4C
+write from: 0x08_3F12  (subtract)
+operand source: 0x7E_00A8  (computed damage)
+```
+
+That gave me the damage value. Walking backwards from there, I found the
+formula assembling itself out of a base power, a stat ratio, and — crucially —
+a multiplier that was either `1.0` or `2.0`.
+
+## the crit "chance"
+
+Here's where it got interesting. The crit multiplier wasn't gated by a roll
+against a crit-rate stat. It was gated by a check against the *low byte of a
+global frame counter*:
+
+```text
+if (frame_counter & 0x0F) == 0  ->  crit
+```
+
+So crits weren't probabilistic at all. They fired on every sixteenth frame,
+regardless of your stats. The "crit rate" item in the menu? Decorative. It
+modified a value the damage routine never read.
+
+This is why it *felt* off. My pattern-matching brain had correctly noticed that
+crits clustered — they landed when my input timing happened to line up with the
+counter — and then invented a superstition to explain it.
+
+## the part where I was also wrong
+
+I was *so* pleased with this discovery that I wrote it up, and then a friend who
+actually knows the disassembly pointed out that I'd misread the mask. It's
+`0x07`, not `0x0F` — crits fire every *eighth* frame, not every sixteenth. My
+breakpoint had been catching a different code path for spell damage.
+
+I'd done exactly what I accused the game of doing: found a pattern, locked onto
+the first explanation, and stopped looking.
+
+## what holds up
+
+The core finding survives: crit in this game is deterministic, tied to a frame
+counter, and the crit-rate stat is cosmetic. But the specific period was wrong
+in my first draft, and the correction came from someone reading the code more
+carefully than I did.
+
+Reverse-engineering is just debugging where you don't have the source and the
+author can't help you. The failure modes are identical. You will see what you
+expect to see unless something forces you not to.

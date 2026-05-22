@@ -1,0 +1,37 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import SectionLabel from '@/components/SectionLabel.astro';
+import Footer from '@/components/Footer.astro';
+import ProjectRow from '@/features/projects/components/ProjectRow.astro';
+import { getProjects } from '@/features/projects/lib/projects';
+
+const projects = await getProjects();
+---
+
+<BaseLayout
+  title="builds — kent caparas"
+  description="things i've built, broken, and kept around to study."
+>
+  <Header homeLink />
+
+  <section>
+    <SectionLabel text="builds & experiments" />
+    <div class="projects">
+      {projects.map((project) => <ProjectRow project={project} />)}
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  section {
+    margin-bottom: 72px;
+  }
+
+  .projects {
+    display: grid;
+    gap: 0;
+  }
+</style>

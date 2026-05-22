@@ -1,0 +1,52 @@
+---
+interface Props {
+  email?: string;
+  github?: string;
+  lastUpdated?: Date;
+}
+
+const {
+  email = 'hi@kentcaparas.dev',
+  github = 'https://github.com/kent-caparas',
+  lastUpdated = new Date(),
+} = Astro.props;
+
+const stamp = `${lastUpdated.getUTCFullYear()}.${String(
+  lastUpdated.getUTCMonth() + 1,
+).padStart(2, '0')}.${String(lastUpdated.getUTCDate()).padStart(2, '0')}`;
+---
+
+<footer id="contact">
+  <div>
+    <a href={`mailto:${email}`}>{email}</a> ·
+    <a href={github} rel="me noopener" target="_blank">github</a> ·
+    <a href="/rss.xml">rss</a>
+  </div>
+  <div>last updated {stamp}</div>
+</footer>
+
+<style>
+  footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px dashed var(--color-line);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-ink-faint);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer a {
+    color: var(--color-ink-dim);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-ink-faint);
+  }
+
+  footer a:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+</style>

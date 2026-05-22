@@ -1,0 +1,18 @@
+---
+name: dispatch.sh
+status: live
+description: a cli that turns my scattered notes into a weekly digest. half tool, half excuse to use rust for something small.
+tags: ['rust', 'cli', 'tools']
+repo: https://github.com/kent-caparas/dispatch
+featured: true
+order: 2
+---
+
+I take notes in a dozen places and read them in none. `dispatch` walks the
+folders I actually use, pulls anything touched in the last seven days, and
+assembles a single markdown digest I can read on Sunday with coffee.
+
+It is the smallest possible thing that solves a real annoyance, which made it
+the perfect excuse to learn Rust properly — error handling, the borrow checker,
+shipping a real binary — without the project itself mattering enough to stall on
+architecture.
