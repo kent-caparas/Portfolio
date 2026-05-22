@@ -1,0 +1,49 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import SectionLabel from '@/components/SectionLabel.astro';
+import Footer from '@/components/Footer.astro';
+import PostRow from '@/features/blog/components/PostRow.astro';
+import ProjectRow from '@/features/projects/components/ProjectRow.astro';
+import AboutSection from '@/features/about/components/AboutSection.astro';
+import { getRecentPosts } from '@/features/blog/lib/posts';
+import { getFeaturedProjects } from '@/features/projects/lib/projects';
+
+const recentPosts = await getRecentPosts(4);
+const featuredProjects = await getFeaturedProjects();
+const lastUpdated = recentPosts[0]?.data.date ?? new Date();
+---
+
+<BaseLayout>
+  <Header />
+
+  <section id="log">
+    <SectionLabel text="recent log entries" />
+    {recentPosts.map((post) => <PostRow post={post} animate />)}
+  </section>
+
+  <section id="builds">
+    <SectionLabel text="builds & experiments" />
+    <div class="projects">
+      {featuredProjects.map((project) => <ProjectRow project={project} />)}
+    </div>
+  </section>
+
+  <section id="about">
+    <SectionLabel text="// about" />
+    <AboutSection />
+  </section>
+
+  <Footer lastUpdated={lastUpdated} />
+</BaseLayout>
+
+<style>
+  section {
+    margin-bottom: 72px;
+  }
+
+  .projects {
+    display: grid;
+    gap: 0;
+  }
+</style>

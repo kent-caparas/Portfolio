@@ -1,0 +1,72 @@
+---
+title: how i broke my own auth system in four ways before lunch
+date: 2026-05-14
+tag: postmortem
+readingTime: 7
+excerpt: started as a quick refactor. ended with me locked out of my own dashboard for two hours. notes on what session invalidation actually means.
+draft: false
+---
+
+It started, as these things do, with a "quick refactor." I wanted to move
+session handling out of a god-object middleware and into something I could
+actually test. Two hours later I was locked out of my own dashboard, staring at
+a `401` that I had personally authored.
+
+Here is the autopsy.
+
+## one: I rotated the signing key without a grace window
+
+The first thing I did was generate a fresh HMAC key, because the old one had
+been sitting in a `.env` file since the beginning of time. Reasonable. What was
+*not* reasonable was deploying it with zero overlap. Every existing session
+token was signed with a key the server no longer recognized.
+
+> If you rotate a signing secret, you need to accept tokens signed with the
+> previous secret for at least as long as your longest session TTL.
+
+I did not. So every logged-in user — all three of them, including me — got
+ejected the instant the deploy went green.
+
+## two: I confused "expired" with "invalid"
+
+When I added the new validation path, I collapsed two failure modes into one
+branch:
+
+```ts
+if (!verify(token, key)) {
+  throw new Unauthorized();
+}
+```
+
+The problem: `verify` returned `false` both for *tampered* tokens and for
+*expired-but-otherwise-valid* ones. An expired token should trigger a refresh
+flow. A tampered one should trigger an alarm. By treating them identically, I
+turned every routine expiry into a hard logout.
+
+## three: the refresh endpoint trusted the thing it was supposed to check
+
+This is the embarrassing one. My refresh handler read the user id from the
+*body* of the request instead of from the (now-invalid) token. So during the
+window where everything was already broken, the refresh path would have happily
+minted a new session for whatever user id you asked for.
+
+I caught it before it shipped. Barely.
+
+## four: I had no way to invalidate a single session
+
+The whole point of the refactor was supposed to be *granular* control. But my
+"sessions" were stateless JWTs with no server-side record, which means there was
+no list to revoke from. The only invalidation primitive I had was "rotate the
+key and nuke everyone" — which is, of course, exactly what I'd done in step one.
+
+## what I actually changed
+
+- Sessions are now opaque ids backed by a server-side store. Revocation is a
+  `DELETE`.
+- Key rotation accepts the previous key for a TTL-length grace window.
+- `expired` and `invalid` are separate branches with separate responses.
+- The refresh handler reads identity from the token, never the body.
+
+The lesson isn't "JWTs are bad." The lesson is that *invalidation is the actual
+feature*, and I'd built an auth system that couldn't do it. Everything else was
+decoration.

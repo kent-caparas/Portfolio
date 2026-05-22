@@ -1,0 +1,75 @@
+---
+import { formatStamp, formatTag, type Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+  /** Add the staggered page-load fade-in (home page log list). */
+  animate?: boolean;
+}
+
+const { post, animate = false } = Astro.props;
+const { title, date, tag, readingTime, excerpt } = post.data;
+const href = `/blog/${post.id}`;
+---
+
+<a href={href} class="post" class:list={{ 'fade-in': animate }}>
+  <div class="post-meta">
+    <span>{formatStamp(date)}</span>
+    <span class="tag">[{formatTag(tag)}]</span>
+    {readingTime && <span>{readingTime} min</span>}
+  </div>
+  <div class="post-title">{title}</div>
+  <div class="post-excerpt">{excerpt}</div>
+</a>
+
+<style>
+  .post {
+    display: block;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-line);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      padding 0.2s ease,
+      background 0.2s ease;
+  }
+
+  .post:hover {
+    padding-left: 12px;
+    background: linear-gradient(90deg, rgba(138, 42, 42, 0.05), transparent);
+  }
+
+  .post:hover .post-title {
+    color: var(--color-accent);
+  }
+
+  .post-meta {
+    display: flex;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-ink-faint);
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  .post-meta .tag {
+    color: var(--color-good);
+  }
+
+  .post-title {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 6px;
+    transition: color 0.15s;
+    letter-spacing: -0.005em;
+  }
+
+  .post-excerpt {
+    color: var(--color-ink-dim);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+</style>

@@ -1,0 +1,148 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { getProjects, statusLabel } from '@/features/projects/lib/projects';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { name, status, description, tags, repo, demo } = project.data;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={`${name} — kent caparas`} description={description}>
+  <Header homeLink />
+
+  <article>
+    <div class="project-head">
+      <div class="row">
+        <h1>{name}</h1>
+        <span class={`status ${status}`}>{statusLabel(status)}</span>
+      </div>
+      <p class="desc">{description}</p>
+      <div class="tags">{tags.map((tag) => <span>{tag}</span>)}</div>
+      <div class="links">
+        {demo && <a href={demo} rel="noopener" target="_blank">demo →</a>}
+        {repo && <a href={repo} rel="noopener" target="_blank">source →</a>}
+      </div>
+    </div>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <p class="back"><a href="/projects">← back to builds</a></p>
+  </article>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .project-head {
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 800;
+    font-size: clamp(32px, 6vw, 48px);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+
+  .status {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+    white-space: nowrap;
+  }
+  .status.live {
+    color: var(--color-good);
+  }
+  .status.broken {
+    color: var(--color-accent);
+  }
+  .status.wip {
+    color: var(--color-ink-dim);
+  }
+
+  .desc {
+    margin-top: 12px;
+    color: var(--color-ink-dim);
+    font-size: 16px;
+  }
+
+  .tags {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-ink-faint);
+  }
+  .tags span::before {
+    content: '#';
+    opacity: 0.5;
+  }
+
+  .links {
+    display: flex;
+    gap: 18px;
+    margin-top: 18px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .links a {
+    color: var(--color-accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .links a:hover {
+    border-bottom-color: var(--color-accent);
+  }
+
+  .prose {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--color-ink);
+  }
+  .prose :global(p) {
+    margin: 0 0 20px;
+  }
+
+  .back {
+    margin-top: 56px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .back a {
+    color: var(--color-ink-dim);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .back a:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+</style>

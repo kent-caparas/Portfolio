@@ -1,0 +1,57 @@
+---
+import PortraitFrame from '@/components/PortraitFrame.astro';
+
+interface Props {
+  imgSrc?: string;
+}
+
+const { imgSrc } = Astro.props;
+---
+
+<div class="about-layout">
+  <PortraitFrame imgSrc={imgSrc} alt="kent caparas" caption="the operator" />
+  <div class="about-text">
+    <p>
+      i'm a developer who treats every system like a puzzle box. half the time
+      i'm building, the other half i'm <em>methodically taking it apart</em> to
+      see what holds it together.
+    </p>
+    <p>
+      my taste was shaped by long jrpgs, late-night patch notes, and the
+      particular satisfaction of finding a bug nobody else has noticed yet.
+    </p>
+    <p>this site is a logbook. it's not trying to be anything else.</p>
+  </div>
+</div>
+
+<style>
+  .about-layout {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  @media (max-width: 560px) {
+    .about-layout {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  .about-text {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--color-ink);
+  }
+
+  .about-text :global(p + p) {
+    margin-top: 16px;
+  }
+
+  .about-text :global(em) {
+    color: var(--color-accent);
+    font-style: italic;
+  }
+</style>

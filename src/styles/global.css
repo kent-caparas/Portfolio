@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #f3ede0;          /* warm paper */
+  --color-bg-soft: #ebe3d2;     /* deeper paper */
+  --color-ink: #1f1b16;         /* near-black ink */
+  --color-ink-dim: #6b6354;     /* muted body */
+  --color-ink-faint: #a89e88;   /* faint captions */
+  --color-accent: #8a2a2a;      /* muted oxblood */
+  --color-accent-soft: #b04a3a; /* hover accent */
+  --color-good: #4a6b3a;        /* deep moss — "live" status */
+  --color-line: #d4ccba;        /* paper rule */
+
+  --font-serif: 'Source Serif 4 Variable', Georgia, serif;
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* subtle paper grain */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(138, 42, 42, 0.025) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(31, 27, 22, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* warm vignette */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at top, transparent 50%, rgba(120, 100, 70, 0.08) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 60px 32px 120px;
+  position: relative;
+  z-index: 3;
+}
+
+/* rotating wireframe globe in background */
+.globe-canvas {
+  position: fixed;
+  top: 50%;
+  right: -180px;
+  transform: translateY(-50%);
+  width: 720px;
+  height: 720px;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  filter: blur(0.3px);
+}
+
+@media (max-width: 768px) {
+  .globe-canvas {
+    width: 480px;
+    height: 480px;
+    right: -200px;
+    opacity: 0.32;
+  }
+}
+
+/* staggered entry animation for the recent-posts list */
+.fade-in {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeIn 0.6s ease forwards;
+}
+.fade-in:nth-child(1) { animation-delay: 0.05s; }
+.fade-in:nth-child(2) { animation-delay: 0.15s; }
+.fade-in:nth-child(3) { animation-delay: 0.25s; }
+.fade-in:nth-child(4) { animation-delay: 0.35s; }
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .fade-in {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

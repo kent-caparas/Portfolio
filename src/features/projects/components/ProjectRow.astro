@@ -1,0 +1,109 @@
+---
+import { statusLabel, type Project } from '../lib/projects';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const { name, status, description, tags, repo, demo } = project.data;
+
+// Prefer the demo link, then repo, then the project detail page.
+const href = demo ?? repo ?? `/projects/${project.id}`;
+const external = href.startsWith('http');
+---
+
+<a
+  href={href}
+  class="project"
+  rel={external ? 'noopener' : undefined}
+  target={external ? '_blank' : undefined}
+>
+  <div class="project-header">
+    <div class="project-name">{name}</div>
+    <div class={`project-status ${status}`}>{statusLabel(status)}</div>
+  </div>
+  <div class="project-desc">{description}</div>
+  <div class="project-tags">
+    {tags.map((tag) => <span>{tag}</span>)}
+  </div>
+</a>
+
+<style>
+  .project {
+    display: block;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    transition:
+      padding 0.2s ease,
+      background 0.2s ease;
+  }
+
+  .project:hover {
+    padding-left: 12px;
+    background: linear-gradient(90deg, rgba(138, 42, 42, 0.05), transparent);
+  }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+    gap: 16px;
+  }
+
+  .project-name {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    transition: color 0.15s;
+  }
+
+  .project:hover .project-name {
+    color: var(--color-accent);
+  }
+
+  .project-status {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--color-ink-faint);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .project-status.live {
+    color: var(--color-good);
+  }
+  .project-status.broken {
+    color: var(--color-accent);
+  }
+  .project-status.wip {
+    color: var(--color-ink-dim);
+  }
+
+  .project-desc {
+    color: var(--color-ink-dim);
+    font-size: 14px;
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+
+  .project-tags {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-ink-faint);
+  }
+
+  .project-tags span::before {
+    content: '#';
+    opacity: 0.5;
+  }
+</style>

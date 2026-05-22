@@ -1,0 +1,57 @@
+---
+import '@fontsource-variable/source-serif-4/index.css';
+import '@fontsource-variable/source-serif-4/wght-italic.css';
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/500.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '@/styles/global.css';
+import Globe from '@/features/globe/components/Globe.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'kent caparas — logbook',
+  description = 'i build things, then i break them on purpose to see what falls out. a developer logbook of postmortems, teardowns, and field notes.',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="kent caparas — logbook"
+      href={new URL('rss.xml', Astro.site)}
+    />
+  </head>
+  <body>
+    <Globe />
+    <div class="wrap">
+      <slot />
+    </div>
+  </body>
+</html>
