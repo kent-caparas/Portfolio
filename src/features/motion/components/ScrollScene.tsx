@@ -42,8 +42,16 @@ export default function ScrollScene() {
       '(prefers-reduced-motion: reduce)',
     ).matches;
 
-    if (reduced || reveals.length === 0) {
+    if (reduced) {
       showAll();
+      return () => {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+      };
+    }
+
+    const bootEls = document.querySelectorAll('[data-boot]');
+    if (reveals.length === 0 && bootEls.length === 0) {
       return () => {
         window.removeEventListener('scroll', onScroll);
         window.removeEventListener('resize', onScroll);
@@ -78,44 +86,46 @@ export default function ScrollScene() {
           }
         }
 
-        gsap.set(reveals, { opacity: 0, y: 22 });
+        if (reveals.length > 0) {
+          gsap.set(reveals, { opacity: 0, y: 22 });
 
-        // Batch reveals: elements entering together stagger like dealt cards.
-        const batch = ScrollTrigger.batch('[data-reveal]', {
-          start: 'top 88%',
-          onEnter: (els) =>
-            gsap.to(els, {
+          // Batch reveals: elements entering together stagger like dealt cards.
+          const batch = ScrollTrigger.batch('[data-reveal]', {
+            start: 'top 88%',
+            onEnter: (els) =>
+              gsap.to(els, {
+                opacity: 1,
+                y: 0,
+                duration: 0.9,
+                ease: 'power3.out',
+                stagger: 0.08,
+                overwrite: true,
+              }),
+          });
+
+          ScrollTrigger.refresh();
+
+          // failsafe: anything already in view on load reveals immediately,
+          // so a section can never get stuck hidden if the batch misses it.
+          const vh = window.innerHeight;
+          const onload = reveals.filter(
+            (el) => el.getBoundingClientRect().top < vh * 0.95,
+          );
+          if (onload.length) {
+            gsap.to(onload, {
               opacity: 1,
               y: 0,
               duration: 0.9,
               ease: 'power3.out',
               stagger: 0.08,
               overwrite: true,
-            }),
-        });
+            });
+          }
 
-        ScrollTrigger.refresh();
-
-        // failsafe: anything already in view on load reveals immediately,
-        // so a section can never get stuck hidden if the batch misses it.
-        const vh = window.innerHeight;
-        const onload = reveals.filter(
-          (el) => el.getBoundingClientRect().top < vh * 0.95,
-        );
-        if (onload.length) {
-          gsap.to(onload, {
-            opacity: 1,
-            y: 0,
-            duration: 0.9,
-            ease: 'power3.out',
-            stagger: 0.08,
-            overwrite: true,
-          });
+          cleanup = () => {
+            batch.forEach((st) => st.kill());
+          };
         }
-
-        cleanup = () => {
-          batch.forEach((st) => st.kill());
-        };
       } catch (_) {
         showAll();
       }
