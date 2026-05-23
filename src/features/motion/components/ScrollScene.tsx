@@ -63,20 +63,44 @@ export default function ScrollScene() {
 
     (async () => {
       try {
-        const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+        const [{ gsap }, { ScrollTrigger }, { default: Lenis }] = await Promise.all([
           import('gsap'),
           import('gsap/ScrollTrigger'),
+          import('lenis'),
         ]);
         if (cancelled) return;
 
         gsap.registerPlugin(ScrollTrigger);
+
+        // ── smooth scroll: Lenis driven by GSAP's ticker so ScrollTrigger and
+        //    the inertial scroll share one clock (no competing rAF loops). ──
+        const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+        lenis.on('scroll', ScrollTrigger.update);
+        const tick = (time: number) => lenis.raf(time * 1000);
+        gsap.ticker.add(tick);
+        gsap.ticker.lagSmoothing(0);
+
+        // In-page anchor links glide instead of jumping. Cross-page links
+        // (different pathname) fall through to normal navigation.
+        const onAnchorClick = (event: MouseEvent) => {
+          const link = (event.target as HTMLElement)?.closest('a');
+          const href = link?.getAttribute('href');
+          if (!href || !href.includes('#')) return;
+          const url = new URL(link!.href, window.location.href);
+          if (url.pathname !== window.location.pathname) return;
+          const target = document.querySelector(url.hash);
+          if (!target) return;
+          event.preventDefault();
+          lenis.scrollTo(target as HTMLElement);
+        };
+        document.addEventListener('click', onAnchorClick);
 
         // ── boot sequence: the hero plays in, then the name glitches once ──
         const bootEls = gsap.utils.toArray<HTMLElement>('[data-boot]');
         if (bootEls.length) {
           gsap.set(bootEls, { opacity: 0, y: 10 });
           const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-          tl.to(bootEls, { opacity: 1, y: 0, duration: 0.6, stagger: 0.16 });
+          tl.to(bootEls, { opacity: 1, y: 0, duration: 0.5, stagger: 0.12 });
           const title = document.querySelector('.title-glitch');
           if (title) {
             tl.add(() => {
@@ -86,19 +110,20 @@ export default function ScrollScene() {
           }
         }
 
+        let killBatch = () => {};
         if (reveals.length > 0) {
-          gsap.set(reveals, { opacity: 0, y: 22 });
+          gsap.set(reveals, { opacity: 0, y: 18 });
 
           // Batch reveals: elements entering together stagger like dealt cards.
           const batch = ScrollTrigger.batch('[data-reveal]', {
-            start: 'top 88%',
+            start: 'top 90%',
             onEnter: (els) =>
               gsap.to(els, {
                 opacity: 1,
                 y: 0,
-                duration: 0.9,
-                ease: 'power3.out',
-                stagger: 0.08,
+                duration: 0.6,
+                ease: 'power2.out',
+                stagger: 0.06,
                 overwrite: true,
               }),
           });
@@ -115,17 +140,22 @@ export default function ScrollScene() {
             gsap.to(onload, {
               opacity: 1,
               y: 0,
-              duration: 0.9,
-              ease: 'power3.out',
-              stagger: 0.08,
+              duration: 0.6,
+              ease: 'power2.out',
+              stagger: 0.06,
               overwrite: true,
             });
           }
 
-          cleanup = () => {
-            batch.forEach((st) => st.kill());
-          };
+          killBatch = () => batch.forEach((st) => st.kill());
         }
+
+        cleanup = () => {
+          killBatch();
+          document.removeEventListener('click', onAnchorClick);
+          gsap.ticker.remove(tick);
+          lenis.destroy();
+        };
       } catch (_) {
         showAll();
       }
