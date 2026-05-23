@@ -1,0 +1,123 @@
+---
+import ThemeToggle from '@/features/theme/components/ThemeToggle.astro';
+/* Fixed RPG-style overlay: a top scroll-progress (XP) bar + a floating status
+ * pill with a live dot, a scroll "depth" readout, and the dusk toggle.
+ * The XP fill width and depth percent are driven by the motion island. */
+---
+
+<div class="xp-track" aria-hidden="true">
+  <div class="xp-fill" id="hud-xp"></div>
+</div>
+
+<div class="hud" role="status" aria-label="session status">
+  <span class="hud__live">
+    <span class="hud__dot" aria-hidden="true"></span>
+    online
+  </span>
+  <span class="hud__depth" aria-hidden="true">
+    depth <span id="hud-pct">00</span>%
+  </span>
+  <ThemeToggle />
+</div>
+
+<style>
+  .xp-track {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 6;
+    background: rgba(var(--color-glow), 0.08);
+    pointer-events: none;
+  }
+
+  .xp-fill {
+    height: 100%;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    background: linear-gradient(
+      90deg,
+      var(--color-accent),
+      var(--color-accent-soft)
+    );
+    box-shadow: 0 0 8px rgba(var(--color-glow), 0.5);
+  }
+
+  .hud {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 12px;
+    background: color-mix(in oklab, var(--color-bg) 82%, transparent);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+
+  .hud__live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-good);
+  }
+
+  .hud__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-good);
+    box-shadow: 0 0 6px var(--color-good);
+    animation: hud-pulse 2.4s var(--ease-in-out) infinite;
+  }
+
+  @keyframes hud-pulse {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.35;
+      transform: scale(0.7);
+    }
+  }
+
+  .hud__depth {
+    color: var(--color-ink-dim);
+  }
+
+  #hud-pct {
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* mobile: drop the depth readout, keep live + toggle */
+  @media (max-width: 560px) {
+    .hud {
+      bottom: 14px;
+      right: 14px;
+      gap: 10px;
+      padding: 7px 10px;
+    }
+    .hud__depth {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hud__dot {
+      animation: none;
+    }
+  }
+</style>

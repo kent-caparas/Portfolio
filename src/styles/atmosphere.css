@@ -1,0 +1,166 @@
+/* Hallmark · redesign · macrostructure: Long Document · tone: editorial+glitch · anchor hue: oxblood/ember
+ * pre-emit critique: P5 H4 E5 S4 R5 V4
+ * Custom motion / dusk-mode / atmosphere layer. Tailwind globals + tokens live in global.css.
+ * motion: GSAP scroll-scrub reveals · boot sequence · title glitch · globe scroll-react · dusk crossfade
+ */
+
+/* ── dusk mode: candlelit ember on warm espresso, never cold black ── */
+[data-theme="dusk"] {
+  --color-bg: #161009;          /* warm espresso */
+  --color-bg-soft: #211810;     /* lifted panel */
+  --color-ink: #efe4d0;         /* warm cream */
+  --color-ink-dim: #b6a98e;     /* muted body */
+  --color-ink-faint: #7a6c54;   /* faint captions */
+  --color-accent: #d8623f;      /* ember terracotta */
+  --color-accent-soft: #f0875a; /* amber flare */
+  --color-good: #8aa760;        /* lit sage — "live" */
+  --color-line: #3a2c1c;        /* warm dark rule */
+  --color-glow: 216, 98, 63;    /* ember rgb */
+}
+
+/* ── motion + space primitives (slow-smooth discipline) ── */
+:root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.18s;
+  --dur-mid: 0.45s;
+  --dur-slow: 0.9s;
+
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 32px;
+  --space-lg: 56px;
+  --space-xl: 80px;
+}
+
+/* one-shot smooth crossfade applied only while the dusk toggle fires */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition:
+    background-color var(--dur-slow) var(--ease-in-out),
+    background-image var(--dur-slow) var(--ease-in-out),
+    color var(--dur-slow) var(--ease-in-out),
+    border-color var(--dur-slow) var(--ease-in-out),
+    fill var(--dur-slow) var(--ease-in-out),
+    stroke var(--dur-slow) var(--ease-in-out) !important;
+}
+
+/* subtle paper grain — warms with the accent */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(var(--color-glow), 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(31, 27, 22, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* warm vignette */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at top, transparent 50%, rgba(120, 100, 70, 0.08) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+[data-theme="dusk"] body::after {
+  background: radial-gradient(ellipse at top, transparent 35%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+/* ── static scanline veil — glitch-as-texture, never animated baseline ── */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.018) 0px,
+    rgba(0, 0, 0, 0.018) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+}
+[data-theme="dusk"] .scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(var(--color-glow), 0.05) 0px,
+    rgba(var(--color-glow), 0.05) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: screen;
+  opacity: 0.5;
+}
+
+/* rotating wireframe globe in background */
+.globe-canvas {
+  position: fixed;
+  top: 50%;
+  right: -180px;
+  transform: translateY(-50%);
+  width: 720px;
+  height: 720px;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  filter: blur(0.3px);
+}
+
+@media (max-width: 768px) {
+  .globe-canvas {
+    width: 480px;
+    height: 480px;
+    right: -200px;
+    opacity: 0.32;
+  }
+}
+
+/* ── scroll reveal base state — GSAP island clears these ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  will-change: transform, opacity;
+}
+/* ── boot sequence base state — the hero plays in on load ── */
+[data-boot] {
+  opacity: 0;
+  transform: translateY(10px);
+  will-change: transform, opacity;
+}
+/* if JS never runs, content must still be visible */
+.no-js [data-reveal],
+.no-js [data-boot] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── glitch: one-shot punctuation, not a baseline loop ── */
+@keyframes glitch-flicker {
+  0% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+  12% { clip-path: inset(18% 0 60% 0); transform: translate(-2px, 0); }
+  24% { clip-path: inset(70% 0 8% 0); transform: translate(2px, 0); }
+  36% { clip-path: inset(40% 0 35% 0); transform: translate(-1px, 0); }
+  48% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+  100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-boot] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .theme-transition,
+  .theme-transition * {
+    transition-duration: 0.12s !important;
+  }
+}

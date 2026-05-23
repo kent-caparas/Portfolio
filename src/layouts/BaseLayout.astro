@@ -7,7 +7,10 @@ import '@fontsource/ibm-plex-sans/600.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
 import '@/styles/global.css';
+import '@/styles/atmosphere.css';
 import Globe from '@/features/globe/components/Globe.astro';
+import ScrollScene from '@/features/motion/components/ScrollScene.tsx';
+import Hud from '@/features/hud/components/Hud.astro';
 
 interface Props {
   title?: string;
@@ -23,12 +26,25 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonical} />
+
+    {/* no-flash: resolve theme + prove JS before first paint */}
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        root.classList.remove('no-js');
+        try {
+          if (localStorage.getItem('theme') === 'dusk') {
+            root.setAttribute('data-theme', 'dusk');
+          }
+        } catch (_) {}
+      })();
+    </script>
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -50,8 +66,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <Globe />
+    <div class="scanlines" aria-hidden="true"></div>
+    <Hud />
     <div class="wrap">
       <slot />
     </div>
+    <ScrollScene client:load />
   </body>
 </html>

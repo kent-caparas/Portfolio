@@ -1,0 +1,107 @@
+---
+/* Dusk-mode toggle. Vanilla: a button + inline script that flips data-theme on
+ * <html> and persists it. Icon + label are CSS-driven off [data-theme] so the
+ * correct state shows before any JS runs (no flash). */
+---
+
+<button
+  type="button"
+  class="theme-toggle"
+  aria-label="toggle dusk mode"
+  aria-pressed="false"
+>
+  <span class="glyph" aria-hidden="true"></span>
+  <span class="label"></span>
+</button>
+
+<script is:inline>
+  (() => {
+    const btn = document.currentScript.previousElementSibling;
+    const root = document.documentElement;
+    const sync = () =>
+      btn.setAttribute(
+        'aria-pressed',
+        root.getAttribute('data-theme') === 'dusk' ? 'true' : 'false',
+      );
+    sync();
+    btn.addEventListener('click', () => {
+      const toDusk = root.getAttribute('data-theme') !== 'dusk';
+      root.classList.add('theme-transition');
+      if (toDusk) root.setAttribute('data-theme', 'dusk');
+      else root.removeAttribute('data-theme');
+      try {
+        localStorage.setItem('theme', toDusk ? 'dusk' : 'paper');
+      } catch (_) {}
+      sync();
+      setTimeout(() => root.classList.remove('theme-transition'), 950);
+    });
+  })();
+</script>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-dim);
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .theme-toggle:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background: rgba(var(--color-glow), 0.06);
+  }
+
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .glyph {
+    font-size: 13px;
+    line-height: 1;
+    color: var(--color-accent);
+    transition: transform var(--dur-mid) var(--ease-out);
+  }
+
+  /* CSS-driven state — correct before JS, no flash */
+  .glyph::before {
+    content: '\2600'; /* ☀ paper */
+  }
+  .label::before {
+    content: 'paper';
+  }
+  :global([data-theme='dusk']) .glyph::before {
+    content: '\263E'; /* ☾ dusk */
+  }
+  :global([data-theme='dusk']) .label::before {
+    content: 'dusk';
+  }
+
+  .theme-toggle:hover .glyph {
+    transform: rotate(-18deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glyph,
+    .theme-toggle {
+      transition: none;
+    }
+    .theme-toggle:hover .glyph {
+      transform: none;
+    }
+  }
+</style>

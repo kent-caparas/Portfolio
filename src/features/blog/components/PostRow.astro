@@ -3,16 +3,14 @@ import { formatStamp, formatTag, type Post } from '../lib/posts';
 
 interface Props {
   post: Post;
-  /** Add the staggered page-load fade-in (home page log list). */
-  animate?: boolean;
 }
 
-const { post, animate = false } = Astro.props;
+const { post } = Astro.props;
 const { title, date, tag, readingTime, excerpt } = post.data;
 const href = `/blog/${post.id}`;
 ---
 
-<a href={href} class="post" class:list={{ 'fade-in': animate }}>
+<a href={href} class="post" data-reveal>
   <div class="post-meta">
     <span>{formatStamp(date)}</span>
     <span class="tag">[{formatTag(tag)}]</span>

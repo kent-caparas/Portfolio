@@ -79,9 +79,37 @@ export default function GlobeCanvas() {
     }
 
     let angle = 0;
-    const tiltX = -0.35; // ~ -20deg
-    const sinT = Math.sin(tiltX);
-    const cosT = Math.cos(tiltX);
+    let baseAngle = 0;
+    let easedScroll = 0;
+    let easedTilt = -0.35; // ~ -20deg resting tilt
+    let sinT = Math.sin(easedTilt);
+    let cosT = Math.cos(easedTilt);
+
+    // scroll "depth": rotates the globe further and tilts it as you descend
+    let scrollProgress = 0;
+    function onScroll() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      scrollProgress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // colors come straight from the global.css tokens (single source of
+    // truth) and re-read on theme change. canvas accepts the hex directly;
+    // per-word depth fade uses ctx.globalAlpha, so no rgba string-building.
+    let inkColor = '';
+    let accentColor = '';
+    function readTheme() {
+      const cs = getComputedStyle(document.documentElement);
+      inkColor = cs.getPropertyValue('--color-ink').trim();
+      accentColor = cs.getPropertyValue('--color-accent').trim();
+    }
+    readTheme();
+    const themeObserver = new MutationObserver(readTheme);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
 
     function rotate(p: Vec, a: number): Vec {
       // y-axis rotation, then x-axis tilt
@@ -122,26 +150,28 @@ export default function GlobeCanvas() {
     function draw() {
       ctx!.clearRect(0, 0, w, h);
 
-      // wireframe — muted oxblood on paper
-      ctx!.strokeStyle = 'rgba(138, 42, 42, 0.22)';
+      // wireframe — accent hue, theme-aware
+      ctx!.strokeStyle = accentColor;
       ctx!.lineWidth = 1;
+      ctx!.globalAlpha = 0.22;
       latLines.forEach(drawRing);
       lonLines.forEach(drawRing);
 
-      // words — dark ink, depth-faded, front hemisphere only
+      // words — ink, depth-faded via globalAlpha, front hemisphere only
       ctx!.textAlign = 'center';
       ctx!.textBaseline = 'middle';
+      ctx!.fillStyle = inkColor;
       for (const p of pts) {
         const r = rotate(p, angle);
         if (r.z < 0) continue;
         const pr = project(r);
         const depth = (r.z + 1) / 2; // 0..1, front = 1
         const fontSize = 8 + depth * 6; // ~8..14px
-        const alpha = 0.15 + depth * 0.45;
+        ctx!.globalAlpha = 0.15 + depth * 0.45;
         ctx!.font = `${fontSize}px 'IBM Plex Mono', monospace`;
-        ctx!.fillStyle = `rgba(31, 27, 22, ${alpha})`;
         ctx!.fillText(p.word, pr.x, pr.y);
       }
+      ctx!.globalAlpha = 1;
     }
 
     let raf = 0;
@@ -153,8 +183,18 @@ export default function GlobeCanvas() {
       draw(); // one static frame, no loop
     } else {
       const loop = () => {
+        baseAngle += 0.0018; // slow drift, ~1 revolution / minute
+        // ease toward scroll-driven targets so it never snaps
+        const targetScroll = scrollProgress * Math.PI * 1.6;
+        easedScroll += (targetScroll - easedScroll) * 0.06;
+        angle = baseAngle + easedScroll;
+
+        const targetTilt = -0.35 - scrollProgress * 0.28;
+        easedTilt += (targetTilt - easedTilt) * 0.06;
+        sinT = Math.sin(easedTilt);
+        cosT = Math.cos(easedTilt);
+
         draw();
-        angle += 0.0018; // slow drift, ~1 revolution / minute
         raf = requestAnimationFrame(loop);
       };
       raf = requestAnimationFrame(loop);
@@ -162,6 +202,8 @@ export default function GlobeCanvas() {
 
     return () => {
       window.removeEventListener('resize', resize);
+      window.removeEventListener('scroll', onScroll);
+      themeObserver.disconnect();
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);

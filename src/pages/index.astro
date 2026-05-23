@@ -19,7 +19,7 @@ const lastUpdated = recentPosts[0]?.data.date ?? new Date();
 
   <section id="log">
     <SectionLabel text="recent log entries" />
-    {recentPosts.map((post) => <PostRow post={post} animate />)}
+    {recentPosts.map((post) => <PostRow post={post} />)}
   </section>
 
   <section id="builds">

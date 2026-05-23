@@ -1,0 +1,1507 @@
+<!DOCTYPE html><html lang="en" class="no-js"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="Astro v6.3.7"><link rel="canonical" href="https://portfolio.example.com/"><script>
+      (() => {
+        const root = document.documentElement;
+        root.classList.remove('no-js');
+        try {
+          if (localStorage.getItem('theme') === 'dusk') {
+            root.setAttribute('data-theme', 'dusk');
+          }
+        } catch (_) {}
+      })();
+    </script><title>kent caparas — logbook</title><meta name="description" content="i build things, then i break them on purpose to see what falls out. a developer logbook of postmortems, teardowns, and field notes."><meta property="og:type" content="website"><meta property="og:title" content="kent caparas — logbook"><meta property="og:description" content="i build things, then i break them on purpose to see what falls out. a developer logbook of postmortems, teardowns, and field notes."><meta property="og:url" content="https://portfolio.example.com/"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="kent caparas — logbook"><meta name="twitter:description" content="i build things, then i break them on purpose to see what falls out. a developer logbook of postmortems, teardowns, and field notes."><link rel="alternate" type="application/rss+xml" title="kent caparas — logbook" href="https://portfolio.example.com/rss.xml"><style data-vite-dev-id="C:/Users/kentc/Portfolio/node_modules/@fontsource-variable/source-serif-4/index.css">/* source-serif-4-cyrillic-ext-wght-normal */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-ext-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+/* source-serif-4-cyrillic-wght-normal */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+/* source-serif-4-greek-wght-normal */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-greek-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;
+}
+
+/* source-serif-4-vietnamese-wght-normal */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-vietnamese-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;
+}
+
+/* source-serif-4-latin-ext-wght-normal */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-ext-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* source-serif-4-latin-wght-normal */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/node_modules/@fontsource-variable/source-serif-4/wght-italic.css">/* source-serif-4-cyrillic-ext-wght-italic */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-ext-wght-italic.woff2) format('woff2-variations');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+/* source-serif-4-cyrillic-wght-italic */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-wght-italic.woff2) format('woff2-variations');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+/* source-serif-4-greek-wght-italic */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-greek-wght-italic.woff2) format('woff2-variations');
+  unicode-range: U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;
+}
+
+/* source-serif-4-vietnamese-wght-italic */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-vietnamese-wght-italic.woff2) format('woff2-variations');
+  unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;
+}
+
+/* source-serif-4-latin-ext-wght-italic */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-ext-wght-italic.woff2) format('woff2-variations');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* source-serif-4-latin-wght-italic */
+@font-face {
+  font-family: 'Source Serif 4 Variable';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-italic.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/node_modules/@fontsource/ibm-plex-sans/400.css">/* ibm-plex-sans-cyrillic-ext-400-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-400-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-400-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+/* ibm-plex-sans-cyrillic-400-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-400-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-400-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+/* ibm-plex-sans-greek-400-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-greek-400-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-greek-400-normal.woff) format('woff');
+  unicode-range: U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;
+}
+
+/* ibm-plex-sans-vietnamese-400-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-vietnamese-400-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-vietnamese-400-normal.woff) format('woff');
+  unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;
+}
+
+/* ibm-plex-sans-latin-ext-400-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-ext-400-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-ext-400-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ibm-plex-sans-latin-400-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/node_modules/@fontsource/ibm-plex-sans/500.css">/* ibm-plex-sans-cyrillic-ext-500-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-500-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-500-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+/* ibm-plex-sans-cyrillic-500-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-500-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-500-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+/* ibm-plex-sans-greek-500-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-greek-500-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-greek-500-normal.woff) format('woff');
+  unicode-range: U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;
+}
+
+/* ibm-plex-sans-vietnamese-500-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-vietnamese-500-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-vietnamese-500-normal.woff) format('woff');
+  unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;
+}
+
+/* ibm-plex-sans-latin-ext-500-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-ext-500-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-ext-500-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ibm-plex-sans-latin-500-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-500-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-500-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/node_modules/@fontsource/ibm-plex-sans/600.css">/* ibm-plex-sans-cyrillic-ext-600-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-600-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-600-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+/* ibm-plex-sans-cyrillic-600-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-600-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-cyrillic-600-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+/* ibm-plex-sans-greek-600-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-greek-600-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-greek-600-normal.woff) format('woff');
+  unicode-range: U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;
+}
+
+/* ibm-plex-sans-vietnamese-600-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-vietnamese-600-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-vietnamese-600-normal.woff) format('woff');
+  unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;
+}
+
+/* ibm-plex-sans-latin-ext-600-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-ext-600-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-ext-600-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ibm-plex-sans-latin-600-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/node_modules/@fontsource/ibm-plex-mono/400.css">/* ibm-plex-mono-cyrillic-ext-400-normal */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+/* ibm-plex-mono-cyrillic-400-normal */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+/* ibm-plex-mono-vietnamese-400-normal */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-normal.woff) format('woff');
+  unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;
+}
+
+/* ibm-plex-mono-latin-ext-400-normal */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ibm-plex-mono-latin-400-normal */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/node_modules/@fontsource/ibm-plex-mono/500.css">/* ibm-plex-mono-cyrillic-ext-500-normal */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+/* ibm-plex-mono-cyrillic-500-normal */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+/* ibm-plex-mono-vietnamese-500-normal */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-normal.woff) format('woff');
+  unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;
+}
+
+/* ibm-plex-mono-latin-ext-500-normal */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ibm-plex-mono-latin-500-normal */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2) format('woff2'), url(/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/styles/global.css">/*! tailwindcss v4.3.0 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --font-serif: 'Source Serif 4 Variable', Georgia, serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --color-blue-500: oklch(62.3% 0.214 259.815);
+    --color-blue-600: oklch(54.6% 0.245 262.881);
+    --color-gray-500: oklch(55.1% 0.027 264.364);
+    --color-gray-700: oklch(37.3% 0.034 259.733);
+    --color-black: #000;
+    --color-white: #fff;
+    --spacing: 0.25rem;
+    --text-xs: 0.75rem;
+    --text-xs--line-height: calc(1 / 0.75);
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75 / 1.125);
+    --text-xl: 1.25rem;
+    --text-xl--line-height: calc(1.75 / 1.25);
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+    --tracking-tight: -0.025em;
+    --tracking-normal: 0em;
+    --leading-tight: 1.25;
+    --leading-snug: 1.375;
+    --radius-xs: 0.125rem;
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+    --color-bg: #f3ede0;
+    --color-bg-soft: #ebe3d2;
+    --color-ink: #1f1b16;
+    --color-ink-dim: #6b6354;
+    --color-ink-faint: #a89e88;
+    --color-accent: #8a2a2a;
+    --color-accent-soft: #b04a3a;
+    --color-good: #4a6b3a;
+    --color-line: #d4ccba;
+    --color-glow: 138, 42, 42;
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities {
+  .collapse {
+    visibility: collapse;
+  }
+  .invisible {
+    visibility: hidden;
+  }
+  .visible {
+    visibility: visible;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  .absolute {
+    position: absolute;
+  }
+  .fixed {
+    position: fixed;
+  }
+  .relative {
+    position: relative;
+  }
+  .static {
+    position: static;
+  }
+  .sticky {
+    position: sticky;
+  }
+  .top-0 {
+    top: calc(var(--spacing) * 0);
+  }
+  .isolate {
+    isolation: isolate;
+  }
+  .z-50 {
+    z-index: 50;
+  }
+  .container {
+    width: 100%;
+    @media (width >= 40rem) {
+      max-width: 40rem;
+    }
+    @media (width >= 48rem) {
+      max-width: 48rem;
+    }
+    @media (width >= 64rem) {
+      max-width: 64rem;
+    }
+    @media (width >= 80rem) {
+      max-width: 80rem;
+    }
+    @media (width >= 96rem) {
+      max-width: 96rem;
+    }
+  }
+  .mx-auto {
+    margin-inline: auto;
+  }
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  .block {
+    display: block;
+  }
+  .contents {
+    display: contents;
+  }
+  .flex {
+    display: flex;
+  }
+  .grid {
+    display: grid;
+  }
+  .hidden {
+    display: none;
+  }
+  .inline {
+    display: inline;
+  }
+  .table {
+    display: table;
+  }
+  .h-auto {
+    height: auto;
+  }
+  .min-h-dvh {
+    min-height: 100dvh;
+  }
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  .w-full {
+    width: 100%;
+  }
+  .max-w-full {
+    max-width: 100%;
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .shrink {
+    flex-shrink: 1;
+  }
+  .grow {
+    flex-grow: 1;
+  }
+  .transform {
+    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+  }
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  .resize {
+    resize: both;
+  }
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
+  }
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .overflow-hidden {
+    overflow: hidden;
+  }
+  .rounded {
+    border-radius: 0.25rem;
+  }
+  .rounded-full {
+    border-radius: calc(infinity * 1px);
+  }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+  .bg-blue-500 {
+    background-color: var(--color-blue-500);
+  }
+  .bg-white {
+    background-color: var(--color-white);
+  }
+  .object-contain {
+    object-fit: contain;
+  }
+  .object-cover {
+    object-fit: cover;
+  }
+  .px-4 {
+    padding-inline: calc(var(--spacing) * 4);
+  }
+  .py-8 {
+    padding-block: calc(var(--spacing) * 8);
+  }
+  .text-2xl {
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
+  .text-lg {
+    font-size: var(--text-lg);
+    line-height: var(--tw-leading, var(--text-lg--line-height));
+  }
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+  .text-xl {
+    font-size: var(--text-xl);
+    line-height: var(--tw-leading, var(--text-xl--line-height));
+  }
+  .text-xs {
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
+  .text-wrap {
+    text-wrap: wrap;
+  }
+  .break-words {
+    overflow-wrap: break-word;
+  }
+  .text-clip {
+    text-overflow: clip;
+  }
+  .text-gray-500 {
+    color: var(--color-gray-500);
+  }
+  .text-gray-700 {
+    color: var(--color-gray-700);
+  }
+  .text-ink {
+    color: var(--color-ink);
+  }
+  .text-white {
+    color: var(--color-white);
+  }
+  .lowercase {
+    text-transform: lowercase;
+  }
+  .uppercase {
+    text-transform: uppercase;
+  }
+  .italic {
+    font-style: italic;
+  }
+  .ordinal {
+    --tw-ordinal: ordinal;
+    font-variant-numeric: var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,);
+  }
+  .tabular-nums {
+    --tw-numeric-spacing: tabular-nums;
+    font-variant-numeric: var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,);
+  }
+  .underline {
+    text-decoration-line: underline;
+  }
+  .accent-ink {
+    accent-color: var(--color-ink);
+  }
+  .shadow {
+    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .ring {
+    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .outline {
+    outline-style: var(--tw-outline-style);
+    outline-width: 1px;
+  }
+  .blur {
+    --tw-blur: blur(8px);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .filter {
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .backdrop-blur {
+    --tw-backdrop-blur: blur(8px);
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  }
+  .backdrop-filter {
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  }
+  .transition {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .ease-in {
+    --tw-ease: var(--ease-in);
+    transition-timing-function: var(--ease-in);
+  }
+  .ease-in-out {
+    --tw-ease: var(--ease-in-out);
+    transition-timing-function: var(--ease-in-out);
+  }
+  .ease-out {
+    --tw-ease: var(--ease-out);
+    transition-timing-function: var(--ease-out);
+  }
+  .hover\:scale-105 {
+    &:hover {
+      @media (hover: hover) {
+        --tw-scale-x: 105%;
+        --tw-scale-y: 105%;
+        --tw-scale-z: 105%;
+        scale: var(--tw-scale-x) var(--tw-scale-y);
+      }
+    }
+  }
+  .hover\:bg-blue-600 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-blue-600);
+      }
+    }
+  }
+  .focus\:ring-2 {
+    &:focus {
+      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+  }
+  .focus\:ring-blue-500 {
+    &:focus {
+      --tw-ring-color: var(--color-blue-500);
+    }
+  }
+  .focus\:ring-offset-2 {
+    &:focus {
+      --tw-ring-offset-width: 2px;
+      --tw-ring-offset-shadow: var(--tw-ring-inset,) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    }
+  }
+  .focus\:outline-none {
+    &:focus {
+      --tw-outline-style: none;
+      outline-style: none;
+    }
+  }
+  .md\:w-1\/2 {
+    @media (width >= 48rem) {
+      width: calc(1 / 2 * 100%);
+    }
+  }
+  .md\:flex-row {
+    @media (width >= 48rem) {
+      flex-direction: row;
+    }
+  }
+  .md\:gap-6 {
+    @media (width >= 48rem) {
+      gap: calc(var(--spacing) * 6);
+    }
+  }
+  .lg\:w-1\/3 {
+    @media (width >= 64rem) {
+      width: calc(1 / 3 * 100%);
+    }
+  }
+  .lg\:gap-8 {
+    @media (width >= 64rem) {
+      gap: calc(var(--spacing) * 8);
+    }
+  }
+}
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: clip;
+}
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 60px 32px 120px;
+  position: relative;
+  z-index: 3;
+}
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-ordinal {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-slashed-zero {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-numeric-figure {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-numeric-spacing {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-numeric-fraction {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ease {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-scale-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
+      --tw-border-style: solid;
+      --tw-ordinal: initial;
+      --tw-slashed-zero: initial;
+      --tw-numeric-figure: initial;
+      --tw-numeric-spacing: initial;
+      --tw-numeric-fraction: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-outline-style: solid;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
+      --tw-backdrop-blur: initial;
+      --tw-backdrop-brightness: initial;
+      --tw-backdrop-contrast: initial;
+      --tw-backdrop-grayscale: initial;
+      --tw-backdrop-hue-rotate: initial;
+      --tw-backdrop-invert: initial;
+      --tw-backdrop-opacity: initial;
+      --tw-backdrop-saturate: initial;
+      --tw-backdrop-sepia: initial;
+      --tw-ease: initial;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+      --tw-scale-z: 1;
+    }
+  }
+}
+</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/styles/atmosphere.css">/* Hallmark · redesign · macrostructure: Long Document · tone: editorial+glitch · anchor hue: oxblood/ember
+ * pre-emit critique: P5 H4 E5 S4 R5 V4
+ * Custom motion / dusk-mode / atmosphere layer. Tailwind globals + tokens live in global.css.
+ * motion: GSAP scroll-scrub reveals · boot sequence · title glitch · globe scroll-react · dusk crossfade
+ */
+
+/* ── dusk mode: candlelit ember on warm espresso, never cold black ── */
+[data-theme="dusk"] {
+  --color-bg: #161009;          /* warm espresso */
+  --color-bg-soft: #211810;     /* lifted panel */
+  --color-ink: #efe4d0;         /* warm cream */
+  --color-ink-dim: #b6a98e;     /* muted body */
+  --color-ink-faint: #7a6c54;   /* faint captions */
+  --color-accent: #d8623f;      /* ember terracotta */
+  --color-accent-soft: #f0875a; /* amber flare */
+  --color-good: #8aa760;        /* lit sage — "live" */
+  --color-line: #3a2c1c;        /* warm dark rule */
+  --color-glow: 216, 98, 63;    /* ember rgb */
+}
+
+/* ── motion + space primitives (slow-smooth discipline) ── */
+:root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.18s;
+  --dur-mid: 0.45s;
+  --dur-slow: 0.9s;
+
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 32px;
+  --space-lg: 56px;
+  --space-xl: 80px;
+}
+
+/* one-shot smooth crossfade applied only while the dusk toggle fires */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition:
+    background-color var(--dur-slow) var(--ease-in-out),
+    background-image var(--dur-slow) var(--ease-in-out),
+    color var(--dur-slow) var(--ease-in-out),
+    border-color var(--dur-slow) var(--ease-in-out),
+    fill var(--dur-slow) var(--ease-in-out),
+    stroke var(--dur-slow) var(--ease-in-out) !important;
+}
+
+/* subtle paper grain — warms with the accent */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(var(--color-glow), 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(31, 27, 22, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* warm vignette */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at top, transparent 50%, rgba(120, 100, 70, 0.08) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+[data-theme="dusk"] body::after {
+  background: radial-gradient(ellipse at top, transparent 35%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+/* ── static scanline veil — glitch-as-texture, never animated baseline ── */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.018) 0px,
+    rgba(0, 0, 0, 0.018) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+}
+[data-theme="dusk"] .scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(var(--color-glow), 0.05) 0px,
+    rgba(var(--color-glow), 0.05) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: screen;
+  opacity: 0.5;
+}
+
+/* rotating wireframe globe in background */
+.globe-canvas {
+  position: fixed;
+  top: 50%;
+  right: -180px;
+  transform: translateY(-50%);
+  width: 720px;
+  height: 720px;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  filter: blur(0.3px);
+}
+
+@media (max-width: 768px) {
+  .globe-canvas {
+    width: 480px;
+    height: 480px;
+    right: -200px;
+    opacity: 0.32;
+  }
+}
+
+/* ── scroll reveal base state — GSAP island clears these ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  will-change: transform, opacity;
+}
+/* ── boot sequence base state — the hero plays in on load ── */
+[data-boot] {
+  opacity: 0;
+  transform: translateY(10px);
+  will-change: transform, opacity;
+}
+/* if JS never runs, content must still be visible */
+.no-js [data-reveal],
+.no-js [data-boot] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── glitch: one-shot punctuation, not a baseline loop ── */
+@keyframes glitch-flicker {
+  0% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+  12% { clip-path: inset(18% 0 60% 0); transform: translate(-2px, 0); }
+  24% { clip-path: inset(70% 0 8% 0); transform: translate(2px, 0); }
+  36% { clip-path: inset(40% 0 35% 0); transform: translate(-1px, 0); }
+  48% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+  100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-boot] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .theme-transition,
+  .theme-transition * {
+    transition-duration: 0.12s !important;
+  }
+}
+</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/features/theme/components/ThemeToggle.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.theme-toggle[data-astro-cid-vzz3izag]{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--color-line);border-radius:999px;padding:6px 12px;cursor:pointer;font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-ink-dim);transition:color var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out),background-color var(--dur-fast) var(--ease-out)}.theme-toggle[data-astro-cid-vzz3izag]:hover{color:var(--color-accent);border-color:var(--color-accent);background:rgba(var(--color-glow),0.06)}.theme-toggle[data-astro-cid-vzz3izag]:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}.glyph[data-astro-cid-vzz3izag]{font-size:13px;line-height:1;color:var(--color-accent);transition:transform var(--dur-mid) var(--ease-out)}.glyph[data-astro-cid-vzz3izag]::before{content:"☀"}.label[data-astro-cid-vzz3izag]::before{content:"paper"}[data-theme="dusk"] .glyph[data-astro-cid-vzz3izag]::before{content:"☾"}[data-theme="dusk"] .label[data-astro-cid-vzz3izag]::before{content:"dusk"}.theme-toggle[data-astro-cid-vzz3izag]:hover .glyph[data-astro-cid-vzz3izag]{transform:rotate(-18deg)}@media (prefers-reduced-motion: reduce){.glyph[data-astro-cid-vzz3izag],.theme-toggle[data-astro-cid-vzz3izag]{transition:none}.theme-toggle[data-astro-cid-vzz3izag]:hover .glyph[data-astro-cid-vzz3izag]{transform:none}}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/features/hud/components/Hud.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.xp-track[data-astro-cid-dtz6ehu5]{position:fixed;top:0;left:0;right:0;height:3px;z-index:6;background:rgba(var(--color-glow),0.08);pointer-events:none}.xp-fill[data-astro-cid-dtz6ehu5]{height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,var(--color-accent),var(--color-accent-soft));box-shadow:0 0 8px rgba(var(--color-glow),0.5)}.hud[data-astro-cid-dtz6ehu5]{position:fixed;bottom:20px;right:20px;z-index:6;display:flex;align-items:center;gap:14px;padding:8px 12px;background:color-mix(in oklab,var(--color-bg) 82%,transparent);backdrop-filter:blur(6px);border:1px solid var(--color-line);border-radius:999px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-ink-faint)}.hud__live[data-astro-cid-dtz6ehu5]{display:inline-flex;align-items:center;gap:6px;color:var(--color-good)}.hud__dot[data-astro-cid-dtz6ehu5]{width:7px;height:7px;border-radius:50%;background:var(--color-good);box-shadow:0 0 6px var(--color-good);animation:hud-pulse 2.4s var(--ease-in-out) infinite}@keyframes hud-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.35;transform:scale(0.7)}}.hud__depth[data-astro-cid-dtz6ehu5]{color:var(--color-ink-dim)}#hud-pct[data-astro-cid-dtz6ehu5]{color:var(--color-accent);font-variant-numeric:tabular-nums}@media (max-width: 560px){.hud[data-astro-cid-dtz6ehu5]{bottom:14px;right:14px;gap:10px;padding:7px 10px}.hud__depth[data-astro-cid-dtz6ehu5]{display:none}}@media (prefers-reduced-motion: reduce){.hud__dot[data-astro-cid-dtz6ehu5]{animation:none}}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/components/Nav.astro?astro&amp;type=style&amp;index=0&amp;lang.css">nav[data-astro-cid-dmqpwcec]{display:flex;gap:24px;margin-top:28px;font-family:var(--font-mono);font-size:13px;flex-wrap:wrap}a[data-astro-cid-dmqpwcec]{color:var(--color-ink-dim);text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px;transition:color 0.15s,border-color 0.15s}a[data-astro-cid-dmqpwcec]::before{content:"> ";color:var(--color-ink-faint)}a[data-astro-cid-dmqpwcec]:hover,a[data-astro-cid-dmqpwcec][aria-current=page]{color:var(--color-accent);border-bottom-color:var(--color-accent)}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/components/Header.astro?astro&amp;type=style&amp;index=0&amp;lang.css">header[data-astro-cid-3ef6ksr2]{border-bottom:1px dashed var(--color-line);padding-bottom:32px;margin-bottom:56px}.boot-feed[data-astro-cid-3ef6ksr2]{display:flex;flex-direction:column;gap:2px;font-family:var(--font-mono);font-size:11px;color:var(--color-ink-faint);letter-spacing:0.04em;margin-bottom:16px}.boot-line[data-astro-cid-3ef6ksr2]:last-child{color:var(--color-good)}.system-line[data-astro-cid-3ef6ksr2]{font-family:var(--font-mono);font-size:12px;color:var(--color-ink-faint);letter-spacing:0.05em;margin-bottom:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}.blink[data-astro-cid-3ef6ksr2]{color:var(--color-accent);animation:blink 1.2s steps(2) infinite}@keyframes blink{50%{opacity:0}}h1[data-astro-cid-3ef6ksr2]{font-family:var(--font-serif);font-weight:800;font-size:clamp(40px,7vw,64px);line-height:1.05;letter-spacing:-0.02em;margin-bottom:16px;overflow-wrap:anywhere;min-width:0}h1[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{color:inherit;text-decoration:none}h1[data-astro-cid-3ef6ksr2] .accent[data-astro-cid-3ef6ksr2]{color:var(--color-accent);font-style:italic}.title-glitch[data-astro-cid-3ef6ksr2]{position:relative;display:inline-block}.title-glitch[data-astro-cid-3ef6ksr2]::before,.title-glitch[data-astro-cid-3ef6ksr2]::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;opacity:0;pointer-events:none}.title-glitch[data-astro-cid-3ef6ksr2].glitching::before{color:var(--color-accent);animation:glitch-r 0.52s steps(2,end) 1}.title-glitch[data-astro-cid-3ef6ksr2].glitching::after{color:var(--color-good);animation:glitch-g 0.52s steps(2,end) 1}@keyframes glitch-r{0%,100%{opacity:0;transform:translate(0,0);clip-path:inset(0 0 0 0)}12%{opacity:0.85;transform:translate(-3px,-1px);clip-path:inset(0 0 66% 0)}34%{opacity:0.7;transform:translate(2px,1px);clip-path:inset(58% 0 0 0)}58%{opacity:0.8;transform:translate(-2px,0);clip-path:inset(32% 0 40% 0)}80%{opacity:0.6;transform:translate(1px,-1px);clip-path:inset(80% 0 4% 0)}}@keyframes glitch-g{0%,100%{opacity:0;transform:translate(0,0);clip-path:inset(0 0 0 0)}16%{opacity:0.7;transform:translate(3px,1px);clip-path:inset(70% 0 8% 0)}40%{opacity:0.8;transform:translate(-2px,-1px);clip-path:inset(20% 0 55% 0)}64%{opacity:0.6;transform:translate(2px,1px);clip-path:inset(48% 0 22% 0)}86%{opacity:0.7;transform:translate(-1px,0);clip-path:inset(4% 0 80% 0)}}.tagline[data-astro-cid-3ef6ksr2]{font-size:15px;color:var(--color-ink-dim);max-width:480px}.tagline[data-astro-cid-3ef6ksr2] .hi[data-astro-cid-3ef6ksr2]{color:var(--color-ink)}@media (prefers-reduced-motion: reduce){.blink[data-astro-cid-3ef6ksr2]{animation:none}.title-glitch[data-astro-cid-3ef6ksr2].glitching::before,.title-glitch[data-astro-cid-3ef6ksr2].glitching::after{animation:none;opacity:0}}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/components/SectionLabel.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.section-label[data-astro-cid-n4qxztk5]{font-family:var(--font-mono);font-size:11px;color:var(--color-ink-faint);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:12px}.section-label[data-astro-cid-n4qxztk5]::after{content:"";flex:1;height:1px;background:var(--color-line)}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/components/Footer.astro?astro&amp;type=style&amp;index=0&amp;lang.css">footer[data-astro-cid-sz7xmlte]{margin-top:80px;padding-top:32px;border-top:1px dashed var(--color-line);font-family:var(--font-mono);font-size:12px;color:var(--color-ink-faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}footer[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{color:var(--color-ink-dim);text-decoration:none;border-bottom:1px solid var(--color-ink-faint)}footer[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:var(--color-accent);border-color:var(--color-accent)}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.post[data-astro-cid-bctmbmjh]{display:block;padding:20px 0;border-bottom:1px solid var(--color-line);color:inherit;text-decoration:none;transition:padding 0.2s ease,background 0.2s ease}.post[data-astro-cid-bctmbmjh]:hover{padding-left:12px;background:linear-gradient(90deg,rgba(138,42,42,0.05),transparent)}.post[data-astro-cid-bctmbmjh]:hover .post-title[data-astro-cid-bctmbmjh]{color:var(--color-accent)}.post-meta[data-astro-cid-bctmbmjh]{display:flex;gap:16px;font-family:var(--font-mono);font-size:11px;color:var(--color-ink-faint);margin-bottom:6px;letter-spacing:0.04em}.post-meta[data-astro-cid-bctmbmjh] .tag[data-astro-cid-bctmbmjh]{color:var(--color-good)}.post-title[data-astro-cid-bctmbmjh]{font-family:var(--font-serif);font-size:24px;font-weight:700;line-height:1.25;margin-bottom:6px;transition:color 0.15s;letter-spacing:-0.005em}.post-excerpt[data-astro-cid-bctmbmjh]{color:var(--color-ink-dim);font-size:14px;line-height:1.55}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.project[data-astro-cid-sefzdqfe]{display:block;padding:24px 0;border-bottom:1px solid var(--color-line);text-decoration:none;color:inherit;position:relative;transition:padding 0.2s ease,background 0.2s ease}.project[data-astro-cid-sefzdqfe]:hover{padding-left:12px;background:linear-gradient(90deg,rgba(138,42,42,0.05),transparent)}.project-header[data-astro-cid-sefzdqfe]{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:16px}.project-name[data-astro-cid-sefzdqfe]{font-family:var(--font-serif);font-size:22px;font-weight:700;letter-spacing:-0.005em;transition:color 0.15s}.project[data-astro-cid-sefzdqfe]:hover .project-name[data-astro-cid-sefzdqfe]{color:var(--color-accent)}.project-status[data-astro-cid-sefzdqfe]{font-family:var(--font-mono);font-size:10px;letter-spacing:0.1em;color:var(--color-ink-faint);text-transform:uppercase;white-space:nowrap}.project-status[data-astro-cid-sefzdqfe].live{color:var(--color-good)}.project-status[data-astro-cid-sefzdqfe].broken{color:var(--color-accent)}.project-status[data-astro-cid-sefzdqfe].wip{color:var(--color-ink-dim)}.project-desc[data-astro-cid-sefzdqfe]{color:var(--color-ink-dim);font-size:14px;line-height:1.55;margin-bottom:10px}.project-tags[data-astro-cid-sefzdqfe]{display:flex;gap:12px;flex-wrap:wrap;font-family:var(--font-mono);font-size:11px;color:var(--color-ink-faint)}.project-tags[data-astro-cid-sefzdqfe] span[data-astro-cid-sefzdqfe]::before{content:"#";opacity:0.5}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/components/PortraitFrame.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.portrait[data-astro-cid-a5jgceva]{position:relative}.portrait-frame[data-astro-cid-a5jgceva]{width:180px;height:220px;background:linear-gradient(135deg,rgba(138,42,42,0.04),rgba(138,42,42,0) 60%),repeating-linear-gradient(45deg,var(--color-bg-soft) 0px,var(--color-bg-soft) 8px,var(--color-line) 8px,var(--color-line) 9px);border:1px solid var(--color-line);display:flex;align-items:center;justify-content:center;color:var(--color-ink-faint);font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;position:relative;overflow:hidden}.portrait-frame[data-astro-cid-a5jgceva]:not(.has-img)::before{content:"";position:absolute;inset:8px;border:1px dashed var(--color-ink-faint);opacity:0.4}.portrait-frame[data-astro-cid-a5jgceva]:not(.has-img)::after{content:"[ portrait ]";position:relative;z-index:1}.portrait-frame[data-astro-cid-a5jgceva] img[data-astro-cid-a5jgceva]{width:100%;height:100%;object-fit:cover;display:block}.portrait-caption[data-astro-cid-a5jgceva]{font-family:var(--font-mono);font-size:10px;color:var(--color-ink-faint);letter-spacing:0.1em;margin-top:8px;text-transform:uppercase}.portrait-caption[data-astro-cid-a5jgceva] .fig[data-astro-cid-a5jgceva]{color:var(--color-accent)}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/features/about/components/AboutSection.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.about-layout[data-astro-cid-cfok5ybj]{display:grid;grid-template-columns:180px 1fr;gap:32px;align-items:start}@media (max-width: 560px){.about-layout[data-astro-cid-cfok5ybj]{grid-template-columns:1fr;gap:24px}}.about-text[data-astro-cid-cfok5ybj]{font-family:var(--font-serif);font-size:19px;line-height:1.6;color:var(--color-ink)}.about-text[data-astro-cid-cfok5ybj] p + p{margin-top:16px}.about-text[data-astro-cid-cfok5ybj] em{color:var(--color-accent);font-style:italic}</style>
+<style data-vite-dev-id="C:/Users/kentc/Portfolio/src/pages/index.astro?astro&amp;type=style&amp;index=0&amp;lang.css">section[data-astro-cid-j7pv25f6]{margin-bottom:72px}.projects[data-astro-cid-j7pv25f6]{display:grid;gap:0}</style><script type="module" src="/@vite/client"></script>
+<script type="module" src="/@id/astro/runtime/client/dev-toolbar/entrypoint.js"></script>
+<script>window.__astro_dev_toolbar__ = {"root":"C:\\Users\\kentc\\Portfolio\\","version":"6.3.7","debugInfo":"Astro                    v6.3.7\nNode                     v22.14.0\nSystem                   Windows (x64)\nPackage Manager          npm\nOutput                   static\nAdapter                  none\nIntegrations             @astrojs/mdx\n                         @astrojs/preact\n                         @astrojs/sitemap"}</script>
+<script type="module" src="/node_modules/@fontsource-variable/source-serif-4/index.css"></script>
+<script type="module" src="/node_modules/@fontsource-variable/source-serif-4/wght-italic.css"></script>
+<script type="module" src="/node_modules/@fontsource/ibm-plex-sans/400.css"></script>
+<script type="module" src="/node_modules/@fontsource/ibm-plex-sans/500.css"></script>
+<script type="module" src="/node_modules/@fontsource/ibm-plex-sans/600.css"></script>
+<script type="module" src="/node_modules/@fontsource/ibm-plex-mono/400.css"></script>
+<script type="module" src="/node_modules/@fontsource/ibm-plex-mono/500.css"></script>
+<script type="module" src="/src/styles/global.css"></script>
+<script type="module" src="/src/styles/atmosphere.css"></script>
+<script type="module" src="/src/features/theme/components/ThemeToggle.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/features/hud/components/Hud.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/Nav.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/Header.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/SectionLabel.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/Footer.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/features/blog/components/PostRow.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/features/projects/components/ProjectRow.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/PortraitFrame.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/features/about/components/AboutSection.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/pages/index.astro?astro&type=style&index=0&lang.css"></script></head> <body data-astro-source-file="C:/Users/kentc/Portfolio/src/layouts/BaseLayout.astro" data-astro-source-loc="67:9"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var g=Object.defineProperty;var w=(d,s,h)=>s in d?g(d,s,{enumerable:!0,configurable:!0,writable:!0,value:h}):d[s]=h;var l=(d,s,h)=>w(d,typeof s!="symbol"?s+"":s,h);var E=new Set(["__proto__","constructor","prototype"]);{let d={0:t=>y(t),1:t=>h(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(h(t)),5:t=>new Set(h(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},s=t=>{let[p,e]=t;return p in d?d[p](e):void 0},h=t=>t.map(s),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,s(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let n=this.querySelectorAll("astro-slot"),r={},i=this.querySelectorAll("template[data-astro-template]");for(let o of i){let c=o.closest(this.tagName);c!=null&&c.isSameNode(this)&&(r[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of n){let c=o.closest(this.tagName);c!=null&&c.isSameNode(this)&&(r[o.getAttribute("name")||"default"]=o.innerHTML)}let m;try{m=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let c=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(c+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${c}`,this.getAttribute("props"),o),o}let a,u=this.hydrator(this);a=performance.now(),await u(this.Component,m,r,{client:this.getAttribute("client")}),a&&this.setAttribute("client-render-time",(performance.now()-a).toString()),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),n.disconnect(),this.childrenConnectedCallback()},n=new MutationObserver(()=>{var r;((r=this.lastChild)==null?void 0:r.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});n.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}getRetryImportUrl(e){let n=new URL(e,document.baseURI),r=`astro-retry=${Date.now()}`,i=n.hash.replace(/^#/,"");return n.hash=i?`${i}&${r}`:r,n.toString()}async importWithRetry(e){try{return await import(e)}catch(n){return await new Promise(r=>setTimeout(r,1e3)),import(this.getRetryImportUrl(e))}}handleHydrationError(e){let n=this.getAttribute("component-url"),r=new CustomEvent("astro:hydration-error",{cancelable:!0,bubbles:!0,composed:!0,detail:{error:e,componentUrl:n}});this.dispatchEvent(r)&&console.error(`[astro-island] Error hydrating ${n}`,e)}async start(){let e=JSON.parse(this.getAttribute("opts")),n=this.getAttribute("client");if(Astro[n]===void 0){window.addEventListener(`astro:${n}`,()=>this.start(),{once:!0});return}try{await Astro[n](async()=>{let r=this.getAttribute("renderer-url");try{let[i,{default:m}]=await Promise.all([this.importWithRetry(this.getAttribute("component-url")),r?this.importWithRetry(r):Promise.resolve({default:()=>()=>{}})]),a=this.getAttribute("component-export")||"default";if(a.includes(".")){this.Component=i;for(let u of a.split(".")){if(E.has(u)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,u))throw new Error(`Invalid component export path: ${a}`);this.Component=this.Component[u]}}else{if(E.has(a))throw new Error(`Invalid component export path: ${a}`);this.Component=i[a]}return this.hydrator=m,this.hydrate}catch(i){return this.handleHydrationError(i),()=>{}}},e,this)}catch(r){this.handleHydrationError(r)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="Z8zTQf" data-preact-island-id="2" component-url="/src/features/globe/components/GlobeCanvas.tsx" component-export="default" renderer-url="/node_modules/@astrojs/preact/dist/client-dev.js" props="{}" ssr client="load" before-hydration-url="/@id/astro:scripts/before-hydration.js" opts="{&quot;name&quot;:&quot;GlobeCanvas&quot;,&quot;value&quot;:true}" server-render-time="0.21670000000085565" await-children><canvas class="globe-canvas" aria-hidden="true"></canvas><!--astro:end--></astro-island> <div class="scanlines" aria-hidden="true" data-astro-source-file="C:/Users/kentc/Portfolio/src/layouts/BaseLayout.astro" data-astro-source-loc="69:6"></div> <div class="xp-track" aria-hidden="true" data-astro-cid-dtz6ehu5 data-astro-source-file="C:/Users/kentc/Portfolio/src/features/hud/components/Hud.astro" data-astro-source-loc="8:42"> <div class="xp-fill" id="hud-xp" data-astro-cid-dtz6ehu5 data-astro-source-file="C:/Users/kentc/Portfolio/src/features/hud/components/Hud.astro" data-astro-source-loc="9:4"></div> </div> <div class="hud" role="status" aria-label="session status" data-astro-cid-dtz6ehu5 data-astro-source-file="C:/Users/kentc/Portfolio/src/features/hud/components/Hud.astro" data-astro-source-loc="12:60"> <span class="hud__live" data-astro-cid-dtz6ehu5 data-astro-source-file="C:/Users/kentc/Portfolio/src/features/hud/components/Hud.astro" data-astro-source-loc="13:27"> <span class="hud__dot" aria-hidden="true" data-astro-cid-dtz6ehu5 data-astro-source-file="C:/Users/kentc/Portfolio/src/features/hud/components/Hud.astro" data-astro-source-loc="14:6"></span>
+online
+</span> <span class="hud__depth" aria-hidden="true" data-astro-cid-dtz6ehu5 data-astro-source-file="C:/Users/kentc/Portfolio/src/features/hud/components/Hud.astro" data-astro-source-loc="17:47">
+depth <span id="hud-pct" data-astro-cid-dtz6ehu5 data-astro-source-file="C:/Users/kentc/Portfolio/src/features/hud/components/Hud.astro" data-astro-source-loc="18:30">00</span>%
+</span> <button type="button" class="theme-toggle" aria-label="toggle dusk mode" aria-pressed="false" data-astro-cid-vzz3izag data-astro-source-file="C:/Users/kentc/Portfolio/src/features/theme/components/ThemeToggle.astro" data-astro-source-loc="12:2"> <span class="glyph" aria-hidden="true" data-astro-cid-vzz3izag data-astro-source-file="C:/Users/kentc/Portfolio/src/features/theme/components/ThemeToggle.astro" data-astro-source-loc="13:4"></span> <span class="label" data-astro-cid-vzz3izag data-astro-source-file="C:/Users/kentc/Portfolio/src/features/theme/components/ThemeToggle.astro" data-astro-source-loc="14:4"></span> </button> <script>
+  (() => {
+    const btn = document.currentScript.previousElementSibling;
+    const root = document.documentElement;
+    const sync = () =>
+      btn.setAttribute(
+        'aria-pressed',
+        root.getAttribute('data-theme') === 'dusk' ? 'true' : 'false',
+      );
+    sync();
+    btn.addEventListener('click', () => {
+      const toDusk = root.getAttribute('data-theme') !== 'dusk';
+      root.classList.add('theme-transition');
+      if (toDusk) root.setAttribute('data-theme', 'dusk');
+      else root.removeAttribute('data-theme');
+      try {
+        localStorage.setItem('theme', toDusk ? 'dusk' : 'paper');
+      } catch (_) {}
+      sync();
+      setTimeout(() => root.classList.remove('theme-transition'), 950);
+    });
+  })();
+</script> </div> <div class="wrap" data-astro-source-file="C:/Users/kentc/Portfolio/src/layouts/BaseLayout.astro" data-astro-source-loc="71:23">  <header data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="15:9"> <div class="boot-feed" data-boot data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="16:36"> <span class="boot-line" data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="17:29">&gt; mounting logbook…</span> <span class="boot-line" data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="18:29">&gt; 64 fragments indexed · 4 live</span> </div> <div class="system-line" data-boot data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="21:38"> <span data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="22:11">SYS::LOGBOOK v0.4.1</span> <span data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="23:11">ONLINE <span class="blink" data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="23:38">●</span></span> </div> <h1 data-boot data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="26:17">  <span class="title-glitch" data-text="kent caparas" data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="37:55"> kent caparas </span> <span class="accent" data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="40:32">.</span>  </h1> <p class="tagline" data-boot data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="46:32"> <span class="hi" data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="47:22">// </span>i build things, then i break them on purpose to
+    see what falls out. sometimes i write about it. occasionally there are
+    dragons.
+</p> <div data-boot data-astro-cid-3ef6ksr2 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Header.astro" data-astro-source-loc="52:18"> <nav data-astro-cid-dmqpwcec data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Nav.astro" data-astro-source-loc="22:6"> <a href="/blog" data-astro-cid-dmqpwcec data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Nav.astro" data-astro-source-loc="28:8"> logs </a><a href="/projects" data-astro-cid-dmqpwcec data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Nav.astro" data-astro-source-loc="28:8"> builds </a><a href="/#about" data-astro-cid-dmqpwcec data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Nav.astro" data-astro-source-loc="28:8"> about </a><a href="/#contact" data-astro-cid-dmqpwcec data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Nav.astro" data-astro-source-loc="28:8"> contact </a> </nav> </div> </header> <section id="log" data-astro-cid-j7pv25f6 data-astro-source-file="C:/Users/kentc/Portfolio/src/pages/index.astro" data-astro-source-loc="20:21"> <div class="section-label" data-reveal data-astro-cid-n4qxztk5 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/SectionLabel.astro" data-astro-source-loc="9:40">recent log entries</div> <a href="/blog/auth-system-four-ways" class="post" data-reveal data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="13:41"> <div class="post-meta" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="14:26"> <span data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="15:11">2026.05.14</span> <span class="tag" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="16:23">[postmortem]</span> <span data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="17:27">7 min</span> </div> <div class="post-title" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="19:27">how i broke my own auth system in four ways before lunch</div> <div class="post-excerpt" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="20:29">started as a quick refactor. ended with me locked out of my own dashboard for two hours. notes on what session invalidation actually means.</div> </a><a href="/blog/jrpg-damage-formula" class="post" data-reveal data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="13:41"> <div class="post-meta" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="14:26"> <span data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="15:11">2026.04.28</span> <span class="tag" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="16:23">[teardown]</span> <span data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="17:27">12 min</span> </div> <div class="post-title" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="19:27">reverse-engineering the damage formula in a 2003 jrpg</div> <div class="post-excerpt" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="20:29">spent a weekend in a hex editor figuring out why crit chance felt off. turns out the rng was lying to me. so was i.</div> </a><a href="/blog/dev-setup-regret" class="post" data-reveal data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="13:41"> <div class="post-meta" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="14:26"> <span data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="15:11">2026.04.02</span> <span class="tag" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="16:23">[patch notes]</span> <span data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="17:27">4 min</span> </div> <div class="post-title" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="19:27">things i changed about my dev setup that i&#39;ll probably regret</div> <div class="post-excerpt" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="20:29">a small dispatch from the editor wars. neovim, kitty, and one config file that has grown teeth.</div> </a><a href="/blog/fuzzing-assumptions" class="post" data-reveal data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="13:41"> <div class="post-meta" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="14:26"> <span data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="15:11">2026.03.11</span> <span class="tag" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="16:23">[field notes]</span> <span data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="17:27">9 min</span> </div> <div class="post-title" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="19:27">what fuzzing a side project taught me about my own assumptions</div> <div class="post-excerpt" data-astro-cid-bctmbmjh data-astro-source-file="C:/Users/kentc/Portfolio/src/features/blog/components/PostRow.astro" data-astro-source-loc="20:29">i thought my input validation was thorough. one afternoon with a fuzzer disagreed, politely and at length.</div> </a> </section> <section id="builds" data-astro-cid-j7pv25f6 data-astro-source-file="C:/Users/kentc/Portfolio/src/pages/index.astro" data-astro-source-loc="25:24"> <div class="section-label" data-reveal data-astro-cid-n4qxztk5 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/SectionLabel.astro" data-astro-source-loc="9:40">builds &amp; experiments</div> <div class="projects" data-astro-cid-j7pv25f6 data-astro-source-file="C:/Users/kentc/Portfolio/src/pages/index.astro" data-astro-source-loc="27:27"> <a href="https://example.com/tinycrawl" class="project" data-reveal rel="noopener" target="_blank" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="22:2"> <div class="project-header" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="23:31"> <div class="project-name" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="24:31">tinycrawl</div> <div class="project-status live" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="25:45">live</div> </div> <div class="project-desc" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="27:29">a minimalist roguelike that fits in a single html file. procgen dungeons, permadeath, weirdly emotional ending.</div> <div class="project-tags" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="28:29"> <span data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="29:30">typescript</span><span data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="29:30">canvas</span><span data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="29:30">game</span> </div> </a><a href="https://github.com/kent-caparas/dispatch" class="project" data-reveal rel="noopener" target="_blank" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="22:2"> <div class="project-header" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="23:31"> <div class="project-name" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="24:31">dispatch.sh</div> <div class="project-status live" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="25:45">live</div> </div> <div class="project-desc" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="27:29">a cli that turns my scattered notes into a weekly digest. half tool, half excuse to use rust for something small.</div> <div class="project-tags" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="28:29"> <span data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="29:30">rust</span><span data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="29:30">cli</span><span data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="29:30">tools</span> </div> </a><a href="https://github.com/kent-caparas/battle-system" class="project" data-reveal rel="noopener" target="_blank" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="22:2"> <div class="project-header" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="23:31"> <div class="project-name" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="24:31">battle-system</div> <div class="project-status broken" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="25:45">broken on purpose</div> </div> <div class="project-desc" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="27:29">a turn-based combat engine i keep tearing apart to study. currently in its third rewrite. fourth pending.</div> <div class="project-tags" data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="28:29"> <span data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="29:30">godot</span><span data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="29:30">gdscript</span><span data-astro-cid-sefzdqfe data-astro-source-file="C:/Users/kentc/Portfolio/src/features/projects/components/ProjectRow.astro" data-astro-source-loc="29:30">experiment</span> </div> </a> </div> </section> <section id="about" data-astro-cid-j7pv25f6 data-astro-source-file="C:/Users/kentc/Portfolio/src/pages/index.astro" data-astro-source-loc="32:23"> <div class="section-label" data-reveal data-astro-cid-n4qxztk5 data-astro-source-file="C:/Users/kentc/Portfolio/src/components/SectionLabel.astro" data-astro-source-loc="9:40">// about</div> <div class="about-layout" data-reveal data-astro-cid-cfok5ybj data-astro-source-file="C:/Users/kentc/Portfolio/src/features/about/components/AboutSection.astro" data-astro-source-loc="11:39"> <div class="portrait" data-astro-cid-a5jgceva data-astro-source-file="C:/Users/kentc/Portfolio/src/components/PortraitFrame.astro" data-astro-source-loc="17:23"> <div class="portrait-frame" data-astro-cid-a5jgceva data-astro-source-file="C:/Users/kentc/Portfolio/src/components/PortraitFrame.astro" data-astro-source-loc="18:66">  </div> <div class="portrait-caption" data-astro-cid-a5jgceva data-astro-source-file="C:/Users/kentc/Portfolio/src/components/PortraitFrame.astro" data-astro-source-loc="21:34"><span class="fig" data-astro-cid-a5jgceva data-astro-source-file="C:/Users/kentc/Portfolio/src/components/PortraitFrame.astro" data-astro-source-loc="21:51">[fig.01]</span> the operator</div> </div> <div class="about-text" data-astro-cid-cfok5ybj data-astro-source-file="C:/Users/kentc/Portfolio/src/features/about/components/AboutSection.astro" data-astro-source-loc="13:27"> <p data-astro-cid-cfok5ybj data-astro-source-file="C:/Users/kentc/Portfolio/src/features/about/components/AboutSection.astro" data-astro-source-loc="14:8">
+i'm a developer who treats every system like a puzzle box. half the time
+      i'm building, the other half i'm <em data-astro-cid-cfok5ybj data-astro-source-file="C:/Users/kentc/Portfolio/src/features/about/components/AboutSection.astro" data-astro-source-loc="16:44">methodically taking it apart</em> to
+      see what holds it together.
+</p> <p data-astro-cid-cfok5ybj data-astro-source-file="C:/Users/kentc/Portfolio/src/features/about/components/AboutSection.astro" data-astro-source-loc="19:8">
+my taste was shaped by long jrpgs, late-night patch notes, and the
+      particular satisfaction of finding a bug nobody else has noticed yet.
+</p> <p data-astro-cid-cfok5ybj data-astro-source-file="C:/Users/kentc/Portfolio/src/features/about/components/AboutSection.astro" data-astro-source-loc="23:8">this site is a logbook. it's not trying to be anything else.</p> </div> </div> </section> <footer id="contact" data-astro-cid-sz7xmlte data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Footer.astro" data-astro-source-loc="19:22"> <div data-astro-cid-sz7xmlte data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Footer.astro" data-astro-source-loc="20:8"> <a href="mailto:hi@kentcaparas.dev" data-astro-cid-sz7xmlte data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Footer.astro" data-astro-source-loc="21:33">hi@kentcaparas.dev</a> ·
+<a href="https://github.com/kent-caparas" rel="me noopener" target="_blank" data-astro-cid-sz7xmlte data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Footer.astro" data-astro-source-loc="22:56">github</a> ·
+<a href="/rss.xml" data-astro-cid-sz7xmlte data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Footer.astro" data-astro-source-loc="23:24">rss</a> </div> <div data-astro-cid-sz7xmlte data-astro-source-file="C:/Users/kentc/Portfolio/src/components/Footer.astro" data-astro-source-loc="25:8">last updated 2026.05.14</div> </footer>  </div> <astro-island uid="Z1JHhRG" data-preact-island-id="3" component-url="/src/features/motion/components/ScrollScene.tsx" component-export="default" renderer-url="/node_modules/@astrojs/preact/dist/client-dev.js" props="{}" ssr client="load" before-hydration-url="/@id/astro:scripts/before-hydration.js" opts="{&quot;name&quot;:&quot;ScrollScene&quot;,&quot;value&quot;:true}"></astro-island> </body></html>

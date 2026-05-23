@@ -13,3 +13,7 @@ npm-debug.log*
 .DS_Store
 # vercel
 .vercel
+.agents
+*.log
+.hallmark
+skills-lock.json
