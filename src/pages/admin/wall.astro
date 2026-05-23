@@ -1,0 +1,46 @@
+---
+export const prerender = false;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import AdminWall from '@/features/wall/components/AdminWall.tsx';
+import '@/styles/wall.css';
+
+// Middleware guarantees a valid session before this page renders; the island
+// fetches its own data via the cookie-authed admin API.
+---
+
+<BaseLayout title="wall · admin — kent caparas" description="restricted area.">
+  <Header homeLink />
+
+  <section class="admin-intro">
+    <p class="admin-back"><a href="/admin">← admin</a></p>
+    <h2>the wall · admin</h2>
+    <AdminWall client:load />
+  </section>
+</BaseLayout>
+
+<style>
+  .admin-intro {
+    margin-bottom: 72px;
+  }
+
+  .admin-back {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .admin-back a {
+    color: var(--color-ink-dim);
+    text-decoration: none;
+  }
+
+  h2 {
+    font-family: var(--font-serif);
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 40px);
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+</style>

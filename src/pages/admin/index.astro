@@ -1,0 +1,68 @@
+---
+export const prerender = false;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import AdminLogin from '@/features/wall/components/AdminLogin.tsx';
+import { ADMIN_COOKIE, verifyAdminCookieValue } from '@/server/wall/admin-auth';
+import '@/styles/wall.css';
+
+const authed = verifyAdminCookieValue(Astro.cookies.get(ADMIN_COOKIE)?.value);
+---
+
+<BaseLayout title="admin — kent caparas" description="restricted area.">
+  <Header homeLink />
+
+  <section class="admin-intro">
+    <h2>admin</h2>
+    {
+      authed ? (
+        <div class="admin-dash">
+          <p>you're in. choose an area.</p>
+          <nav class="admin-links">
+            <a class="wall-btn" href="/admin/wall">
+              manage the wall →
+            </a>
+          </nav>
+          <button id="admin-logout" class="admin-logout" type="button">
+            log out
+          </button>
+        </div>
+      ) : (
+        <>
+          <p>enter your admin token to continue.</p>
+          <AdminLogin client:load />
+        </>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  document.getElementById('admin-logout')?.addEventListener('click', async () => {
+    await fetch('/api/admin/logout', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    location.href = '/admin';
+  });
+</script>
+
+<style>
+  .admin-intro {
+    margin-bottom: 72px;
+  }
+
+  h2 {
+    font-family: var(--font-serif);
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 40px);
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .admin-intro > p {
+    color: var(--color-ink-dim);
+    margin-bottom: 16px;
+  }
+</style>

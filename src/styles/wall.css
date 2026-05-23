@@ -1,0 +1,574 @@
+/* Wall-specific styles. Kept out of global.css (Tailwind tokens only). All
+   colours derive from existing theme tokens via color-mix — no new hex. */
+
+.wall {
+  margin-top: 8px;
+}
+
+/* ── submission form ───────────────────────────────────────────── */
+.wall-form {
+  border: 1px dashed var(--color-line);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 40px;
+  background: color-mix(in srgb, var(--color-bg-soft) 60%, var(--color-bg));
+}
+
+.wall-form__row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.wall-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.wall-form__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-faint);
+}
+
+.wall-form input,
+.wall-form select,
+.wall-form textarea {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  padding: 8px 10px;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+
+.wall-form textarea {
+  resize: vertical;
+  min-height: 84px;
+  line-height: 1.5;
+}
+
+.wall-form input:focus-visible,
+.wall-form select:focus-visible,
+.wall-form textarea:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+  border-color: var(--color-accent);
+}
+
+.wall-form__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.wall-form__count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-ink-faint);
+}
+
+.wall-form__count[data-over='true'] {
+  color: var(--color-accent);
+}
+
+.wall-btn {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--color-bg);
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 3px;
+  padding: 9px 18px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+}
+
+.wall-btn:hover:not(:disabled) {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent-soft);
+}
+
+.wall-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.wall-btn:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+.wall-btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.wall-privacy {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-ink-faint);
+  margin-top: 10px;
+}
+
+.wall-status {
+  font-size: 13px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 3px;
+  border: 1px solid var(--color-line);
+}
+
+.wall-status[data-kind='ok'] {
+  color: var(--color-good);
+  border-color: color-mix(in srgb, var(--color-good) 40%, var(--color-line));
+}
+
+.wall-status[data-kind='pending'] {
+  color: var(--color-ink-dim);
+}
+
+.wall-status[data-kind='error'] {
+  color: var(--color-accent);
+  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-line));
+}
+
+/* ── canvas + notes ────────────────────────────────────────────── */
+.wall-canvas {
+  position: relative;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.wall-note {
+  position: absolute;
+  width: 230px;
+  padding: 14px 16px 12px;
+  border-radius: 2px;
+  background: var(--color-bg-soft);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--color-ink) 10%, transparent),
+    0 8px 18px color-mix(in srgb, var(--color-ink) 14%, transparent);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  will-change: transform;
+}
+
+.wall-note.is-dragging {
+  cursor: grabbing;
+  box-shadow:
+    0 2px 2px color-mix(in srgb, var(--color-ink) 14%, transparent),
+    0 16px 30px color-mix(in srgb, var(--color-ink) 22%, transparent);
+}
+
+.wall-note[data-topic='feedback'] {
+  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg));
+}
+
+.wall-note[data-topic='idea'] {
+  background: color-mix(in srgb, var(--color-good) 14%, var(--color-bg));
+}
+
+.wall-note[data-topic='collab'] {
+  background: color-mix(in srgb, var(--color-ink-dim) 14%, var(--color-bg));
+}
+
+.wall-note[data-topic='hello'] {
+  background: var(--color-bg-soft);
+}
+
+.wall-note__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.wall-note__name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-variant: small-caps;
+  letter-spacing: 0.03em;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.wall-note__topic {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ink-faint);
+  white-space: nowrap;
+}
+
+.wall-note__body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-ink);
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;
+}
+
+.wall-note__time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-ink-faint);
+}
+
+/* ── blank "new note" affordance ───────────────────────────────── */
+.wall-note--new {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 96px;
+  background: color-mix(in srgb, var(--color-accent) 6%, var(--color-bg)) !important;
+  border: 1px dashed var(--color-accent);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.wall-note--new:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.wall-note--new__label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  color: var(--color-accent);
+}
+
+.wall-note--new__hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-ink-faint);
+}
+
+/* ── dialog ────────────────────────────────────────────────────── */
+.wall-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  max-width: 100vw;
+  max-height: 100dvh;
+}
+
+.wall-dialog::backdrop {
+  background: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.wall-dialog__panel {
+  width: min(440px, calc(100vw - 32px));
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  padding: 18px;
+  box-shadow: 0 20px 60px color-mix(in srgb, var(--color-ink) 35%, transparent);
+}
+
+.wall-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.wall-dialog__title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.wall-dialog__close {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--color-ink-dim);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.wall-dialog__close:hover {
+  color: var(--color-accent);
+}
+
+.wall-dialog__close:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* the form inside the dialog shouldn't carry its own card chrome */
+.wall-dialog .wall-form {
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+}
+
+/* ── empty state ───────────────────────────────────────────────── */
+.wall-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.wall-empty__note {
+  width: 230px;
+  padding: 28px 20px;
+  border-radius: 2px;
+  background: var(--color-bg-soft);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--color-ink) 10%, transparent),
+    0 8px 18px color-mix(in srgb, var(--color-ink) 14%, transparent);
+  transform: rotate(-3deg);
+  text-align: center;
+}
+
+.wall-empty__text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--color-ink-faint);
+}
+
+/* ── mobile: drop the scatter, stack honestly ──────────────────── */
+@media (max-width: 640px) {
+  .wall-canvas {
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .wall-note {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100%;
+    cursor: default;
+  }
+
+  .wall-note--new {
+    cursor: pointer;
+  }
+
+  .wall-empty {
+    position: static;
+    min-height: 160px;
+  }
+}
+
+/* ── admin ─────────────────────────────────────────────────────── */
+.admin-dash {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.admin-login {
+  max-width: 440px;
+}
+
+.admin-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-bottom: 1px dashed var(--color-line);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.admin-tab {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-dim);
+  background: transparent;
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.admin-tab:hover {
+  color: var(--color-ink);
+}
+
+.admin-tab.is-active {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.admin-tab:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.admin-logout {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-ink-dim);
+  background: transparent;
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.admin-logout:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.admin-empty {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-ink-faint);
+  padding: 24px 0;
+}
+
+.admin-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-row {
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  padding: 14px 16px;
+  background: color-mix(in srgb, var(--color-bg-soft) 50%, var(--color-bg));
+}
+
+.admin-row__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.admin-row__name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-variant: small-caps;
+  color: var(--color-ink);
+}
+
+.admin-row__topic {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ink-faint);
+}
+
+.admin-row__id {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-ink-faint);
+  margin-left: auto;
+}
+
+.admin-row__body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-ink);
+  margin: 0 0 8px;
+  overflow-wrap: anywhere;
+}
+
+.admin-row__reason {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-ink-faint);
+  margin: 0 0 10px;
+}
+
+.admin-row__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-act {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-ink-dim);
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.admin-act:hover:not(:disabled) {
+  color: var(--color-ink);
+  border-color: var(--color-ink-dim);
+}
+
+.admin-act--danger:hover:not(:disabled) {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.admin-act:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wall-btn:active:not(:disabled) {
+    transform: none;
+  }
+}
