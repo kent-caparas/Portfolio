@@ -1,0 +1,52 @@
+---
+export const prerender = false;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Wall from '@/features/wall/components/Wall.tsx';
+import { getApprovedNotes } from '@/server/wall/storage';
+import type { PublicNote } from '@/server/wall/types';
+import '@/styles/wall.css';
+
+let notes: PublicNote[] = [];
+try {
+  notes = await getApprovedNotes({ limit: 100 });
+} catch (err) {
+  console.error('[wall] failed to load approved notes:', err);
+}
+---
+
+<BaseLayout
+  title="the wall — kent caparas"
+  description="a public sticky-note wall. leave a note, ask anything, propose a collab. every note is moderated before it appears."
+>
+  <Header homeLink />
+
+  <section class="wall-intro">
+    <h2>the wall</h2>
+    <p>leave a note. tell me something. ask anything. propose a collab.</p>
+    <Wall client:load initialNotes={notes} />
+  </section>
+
+  <Footer lastUpdated={new Date()} />
+</BaseLayout>
+
+<style>
+  .wall-intro {
+    margin-bottom: 72px;
+  }
+
+  h2 {
+    font-family: var(--font-serif);
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 40px);
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .wall-intro > p {
+    color: var(--color-ink-dim);
+    margin-bottom: 4px;
+  }
+</style>

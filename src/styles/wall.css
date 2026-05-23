@@ -1,0 +1,286 @@
+/* Wall-specific styles. Kept out of global.css (Tailwind tokens only). All
+   colours derive from existing theme tokens via color-mix — no new hex. */
+
+.wall {
+  margin-top: 8px;
+}
+
+/* ── submission form ───────────────────────────────────────────── */
+.wall-form {
+  border: 1px dashed var(--color-line);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 40px;
+  background: color-mix(in srgb, var(--color-bg-soft) 60%, var(--color-bg));
+}
+
+.wall-form__row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.wall-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.wall-form__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-faint);
+}
+
+.wall-form input,
+.wall-form select,
+.wall-form textarea {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  padding: 8px 10px;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+
+.wall-form textarea {
+  resize: vertical;
+  min-height: 84px;
+  line-height: 1.5;
+}
+
+.wall-form input:focus-visible,
+.wall-form select:focus-visible,
+.wall-form textarea:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+  border-color: var(--color-accent);
+}
+
+.wall-form__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.wall-form__count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-ink-faint);
+}
+
+.wall-form__count[data-over='true'] {
+  color: var(--color-accent);
+}
+
+.wall-btn {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--color-bg);
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 3px;
+  padding: 9px 18px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+}
+
+.wall-btn:hover:not(:disabled) {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent-soft);
+}
+
+.wall-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.wall-btn:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+.wall-btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.wall-privacy {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-ink-faint);
+  margin-top: 10px;
+}
+
+.wall-status {
+  font-size: 13px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 3px;
+  border: 1px solid var(--color-line);
+}
+
+.wall-status[data-kind='ok'] {
+  color: var(--color-good);
+  border-color: color-mix(in srgb, var(--color-good) 40%, var(--color-line));
+}
+
+.wall-status[data-kind='pending'] {
+  color: var(--color-ink-dim);
+}
+
+.wall-status[data-kind='error'] {
+  color: var(--color-accent);
+  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-line));
+}
+
+/* ── canvas + notes ────────────────────────────────────────────── */
+.wall-canvas {
+  position: relative;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.wall-note {
+  position: absolute;
+  width: 230px;
+  padding: 14px 16px 12px;
+  border-radius: 2px;
+  background: var(--color-bg-soft);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--color-ink) 10%, transparent),
+    0 8px 18px color-mix(in srgb, var(--color-ink) 14%, transparent);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  will-change: transform;
+}
+
+.wall-note.is-dragging {
+  cursor: grabbing;
+  box-shadow:
+    0 2px 2px color-mix(in srgb, var(--color-ink) 14%, transparent),
+    0 16px 30px color-mix(in srgb, var(--color-ink) 22%, transparent);
+}
+
+.wall-note[data-topic='feedback'] {
+  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg));
+}
+
+.wall-note[data-topic='idea'] {
+  background: color-mix(in srgb, var(--color-good) 14%, var(--color-bg));
+}
+
+.wall-note[data-topic='collab'] {
+  background: color-mix(in srgb, var(--color-ink-dim) 14%, var(--color-bg));
+}
+
+.wall-note[data-topic='hello'] {
+  background: var(--color-bg-soft);
+}
+
+.wall-note__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.wall-note__name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-variant: small-caps;
+  letter-spacing: 0.03em;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.wall-note__topic {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ink-faint);
+  white-space: nowrap;
+}
+
+.wall-note__body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-ink);
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;
+}
+
+.wall-note__time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-ink-faint);
+}
+
+/* ── empty state ───────────────────────────────────────────────── */
+.wall-empty {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  margin-top: 8px;
+}
+
+.wall-empty__note {
+  width: 230px;
+  padding: 28px 20px;
+  border-radius: 2px;
+  background: var(--color-bg-soft);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--color-ink) 10%, transparent),
+    0 8px 18px color-mix(in srgb, var(--color-ink) 14%, transparent);
+  transform: rotate(-3deg);
+  text-align: center;
+}
+
+.wall-empty__text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--color-ink-faint);
+}
+
+/* ── mobile: drop the scatter, stack honestly ──────────────────── */
+@media (max-width: 640px) {
+  .wall-canvas {
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .wall-note {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100%;
+    cursor: default;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wall-btn:active:not(:disabled) {
+    transform: none;
+  }
+}
