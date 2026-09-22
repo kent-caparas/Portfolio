@@ -103,7 +103,7 @@ const { looseWords } = Astro.props;
     justify-self: end;
     width: min(640px, 100%);
     aspect-ratio: 1;
-    touch-action: pan-y;
+    touch-action: none; /* the globe owns every gesture it starts, the text below still scrolls */
     cursor: grab;
     -webkit-user-select: none;
     user-select: none;

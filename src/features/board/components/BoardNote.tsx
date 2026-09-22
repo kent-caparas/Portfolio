@@ -42,11 +42,24 @@ function PhotoBody({ item }: BodyProps) {
   );
 }
 
+// addresses wrap at the @ on narrow notes instead of mid word
+function breakAtSign(text = '') {
+  const at = text.indexOf('@');
+  if (at < 0) return text;
+  return (
+    <>
+      {text.slice(0, at)}
+      <wbr />
+      {text.slice(at)}
+    </>
+  );
+}
+
 function TextBody({ item }: BodyProps) {
   return (
     <>
       <Head item={item} />
-      <p class="wall-note__body">{item.body}</p>
+      <p class="wall-note__body">{breakAtSign(item.body)}</p>
       {item.createdAt && (
         <time class="wall-note__time" dateTime={item.createdAt}>
           {relativeTime(item.createdAt)}
@@ -61,7 +74,7 @@ function EntryBody({ item }: BodyProps) {
     <>
       <Head item={item} />
       <p class="board-note__title">{item.title}</p>
-      {item.body && <p class="wall-note__body">{item.body}</p>}
+      {item.body && <p class="wall-note__body">{breakAtSign(item.body)}</p>}
     </>
   );
 }

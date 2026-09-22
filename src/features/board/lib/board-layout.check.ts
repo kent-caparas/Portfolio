@@ -4,7 +4,7 @@ import { layoutBoard } from './board-layout';
 
 const notes = Array.from({ length: 11 }, (_, i) => ({ id: `n${i}`, height: 90 + ((i * 37) % 80) }));
 
-for (const width of [320, 760, 1072]) {
+for (const width of [280, 320, 350, 760, 1072]) {
   const tidy = layoutBoard(notes, width, 'tidy');
   const scatter = layoutBoard(notes, width, 'scatter');
   assert.equal(tidy.places.size, notes.length);
@@ -36,5 +36,8 @@ for (const width of [320, 760, 1072]) {
   // same input, same mess
   assert.deepEqual(layoutBoard(notes, width, 'scatter'), scatter);
 }
+
+// phones get two columns
+assert.equal(new Set([...layoutBoard(notes, 342, 'tidy').places.values()].map((p) => p.x)).size, 2);
 
 console.log('board layout ok');
