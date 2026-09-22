@@ -155,6 +155,41 @@ a.board-note:hover .board-note__title {
   color: #2a241d;
 }
 
+/* pinned notes always stay on the wall */
+.note-pin {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  overflow: visible;
+  filter: drop-shadow(1.5px 1.5px 0 var(--note-edge));
+  pointer-events: none;
+}
+
+[data-theme='dusk'] .note-pin {
+  filter: none;
+}
+
+.board-note:has(> .note-pin) .wall-note__head {
+  padding-right: 16px;
+}
+
+.note-pin__head {
+  fill: #f48067; /* Grenadine Pink, both themes */
+  stroke: var(--note-edge);
+  stroke-width: 1.5;
+}
+
+.note-pin__ring {
+  fill: none;
+  stroke: var(--note-edge);
+  stroke-width: 1;
+  opacity: 0.35;
+}
+
+.note-pin__shine {
+  fill: #fdd4bd; /* Seashell Pink */
+}
+
 /* pulse when a globe word sends you here */
 .board-note.is-called::after {
   content: '';

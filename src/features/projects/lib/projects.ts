@@ -10,20 +10,30 @@ const STATUS_LABELS: Record<Project['data']['status'], string> = {
   broken: 'broken',
   wip: 'wip',
   archived: 'archived',
+  job: 'day job',
 };
 
-/** All visible projects, ordered by `order` then name. Drafts are hidden in production builds. */
+const isJob = (project: Project): boolean => project.data.status === 'job';
+
+const shippedAt = (project: Project): number => project.data.date?.getTime() ?? 0;
+
+/** All visible projects, the day job first, then newest. Drafts are hidden in production builds. */
 export async function getProjects(): Promise<Project[]> {
   const projects = await getCollection('projects', isVisible);
   return projects.sort((a, b) => {
-    if (a.data.order !== b.data.order) return a.data.order - b.data.order;
-    return a.data.name.localeCompare(b.data.name);
+    if (isJob(a) !== isJob(b)) return isJob(a) ? -1 : 1;
+    return shippedAt(b) - shippedAt(a);
   });
 }
 
-/** Featured projects only, for the home page. */
-export async function getFeaturedProjects(): Promise<Project[]> {
-  return (await getProjects()).filter((p) => p.data.featured);
+/** The day job, always pinned on the home wall. */
+export async function getJobs(): Promise<Project[]> {
+  return (await getProjects()).filter(isJob);
+}
+
+/** Newest side projects for the home wall, the day job excluded. */
+export async function getRecentProjects(limit: number): Promise<Project[]> {
+  return (await getProjects()).filter((p) => !isJob(p)).slice(0, limit);
 }
 
 /** Display label for a project status. */

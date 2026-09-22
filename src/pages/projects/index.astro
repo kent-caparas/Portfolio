@@ -9,8 +9,8 @@ const projects = await getProjects();
 
 <BaseLayout
   title="Work, Kent Caparas"
-  description="Things I've built and what I decided along the way."
+  description="Things I've built, my day job, and what I decided along the way."
 >
-  <PageIntro title="Work" lede="Things I've built and what I decided along the way." />
+  <PageIntro title="Work" lede="Things I've built, my day job, and what I decided along the way." />
   {projects.map((project) => <ProjectRow project={project} />)}
 </BaseLayout>

@@ -17,13 +17,12 @@ const projects = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
   schema: z.object({
     name: z.string(),
-    status: z.enum(['live', 'broken', 'wip', 'archived']),
+    status: z.enum(['live', 'broken', 'wip', 'archived', 'job']),
     description: z.string(),
     tags: z.array(z.string()),
     repo: z.string().url().optional(),
     demo: z.string().url().optional(),
-    featured: z.boolean().default(false),
-    order: z.number().default(999),
+    date: z.coerce.date().optional(), // when it shipped, the day job has none
     draft: z.boolean().default(false),
   }),
 });

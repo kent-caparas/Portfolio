@@ -1,5 +1,6 @@
 import type { BoardItem, BoardKind } from '../lib/board-items';
 import { relativeTime } from '@/lib/relative-time';
+import NotePin from './NotePin';
 
 interface Props {
   item: BoardItem;
@@ -124,6 +125,7 @@ export default function BoardNote({ item, noteRef, onPointerDown, onClick }: Pro
   if (!item.href) {
     return (
       <div {...shared}>
+        {item.pinned && <NotePin />}
         <Body item={item} />
       </div>
     );
@@ -131,6 +133,7 @@ export default function BoardNote({ item, noteRef, onPointerDown, onClick }: Pro
 
   return (
     <a {...shared} {...linkAttrs(item.href)} href={item.href} draggable={false}>
+      {item.pinned && <NotePin />}
       <Body item={item} />
     </a>
   );

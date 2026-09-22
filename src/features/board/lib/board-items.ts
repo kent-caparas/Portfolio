@@ -23,6 +23,8 @@ export interface BoardItem {
   createdAt?: string;
   /** paper color, visitor notes only */
   topic?: string;
+  /** always on the wall, gets a pushpin */
+  pinned?: boolean;
 }
 
 const EMAIL = 'kentcaparas12@gmail.com';
@@ -36,6 +38,7 @@ export const ABOUT_NOTES: BoardItem[] = [
     word: 'use cases',
     label: 'kent',
     meta: 'about',
+    pinned: true,
     body: 'i love building things. use cases excite me.',
   },
   {
@@ -44,6 +47,7 @@ export const ABOUT_NOTES: BoardItem[] = [
     word: 'shy',
     label: 'kent',
     meta: 'about',
+    pinned: true,
     body: 'someone who could be unhinged, and at the same time exceptionally shy.',
   },
   {
@@ -52,6 +56,7 @@ export const ABOUT_NOTES: BoardItem[] = [
     word: 'desk',
     label: 'kent',
     meta: 'about',
+    pinned: true,
     body: "touching grass helps. it doesn't keep me away from my desk.",
   },
 ];
@@ -63,6 +68,7 @@ export const LINK_NOTES: BoardItem[] = [
     word: 'github',
     label: 'github',
     meta: 'link',
+    pinned: true,
     body: 'kent-caparas',
     href: GITHUB,
   },
@@ -72,6 +78,7 @@ export const LINK_NOTES: BoardItem[] = [
     word: 'email',
     label: 'email',
     meta: 'link',
+    pinned: true,
     body: EMAIL,
     href: `mailto:${EMAIL}`,
   },

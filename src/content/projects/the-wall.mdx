@@ -1,19 +1,22 @@
 ---
 name: The wall
 status: live
-description: A public sticky-note wall. Claude checks every note before it sticks, and anything it's unsure about waits for me.
+description: Leave me a note. Ask a question, share something you learned, or just say hi. Claude reads every note before it sticks.
 tags: ['preact', 'claude api', 'upstash']
-featured: true
-order: 2
+date: 2026-05-23
 ---
 
-A place for visitors to leave a question, an idea, or something they learned.
-[Open the wall](/wall).
+This is where you get to talk back. Leave a question, an idea, or something you
+learned, and it sticks to the wall for everyone to see.
+[Go leave one!](/wall)
 
-Each note goes through a moderation prompt that treats the note as data, never
-as instructions. Only confident approvals go live. A low score or a failed
-call puts the note in a queue for me to review. A moderation failure can never
-become an approval.
+*The catch:* every note goes through Claude first. It reads your note as plain
+text, never as instructions, so I'd still avoid prompt injections. If Claude is
+sure a note is fine, it goes up right away. If it's sure it isn't, it's out.
+Anything in between waits for me to read it myself. And if the check itself
+breaks, the note waits too, because **a broken check should never let a note
+through.**
 
-Submissions are rate limited per hour. Notes can be dragged around, and the
-layout is seeded from each note's id, so every visitor sees the same scatter.
+To keep it from getting spammed, you can post up to five notes an hour. You can
+also drag the notes around, and everyone sees the same mess, since each note's
+spot comes from its id.

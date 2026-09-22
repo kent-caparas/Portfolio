@@ -1,19 +1,22 @@
 ---
-name: old-portfolio
+name: Old portfolio
 status: archived
-description: an isometric 3d portfolio i loved building and nobody could navigate. lessons retained, source kept honest.
-tags: ['three.js', 'retired']
-repo: https://github.com/kent-caparas/old-portfolio
-featured: false
-order: 4
-draft: true
+description: My portfolio before this one. A little 3D world you walk around in as a character.
+tags: ['three.js', 'react three fiber', 'rapier']
+repo: https://github.com/kcaparas1630/3d-portfolio
+demo: https://3d-portfolio-two-dun.vercel.app
+date: 2025-11-23
 ---
 
-An isometric 3D room you walked through to find my work. Objects on the desk
-were projects. The bookshelf was the blog. It was the most fun I've ever had
-building a site and the worst site I've ever built — people loaded it, said
-"whoa," and then couldn't figure out how to read a single post.
+Before this site, my portfolio felt more like a game. You land in a small outdoor
+world with grass, trees, flowers, and rocks, and walk a character around it.
+*Yes, there's a jump button.*
 
-Archived rather than deleted, because the lesson was expensive and I'd like to
-remember it: a portfolio's job is to get out of the way of the work. The current
-site is the correction.
+React Three Fiber and drei draw the world, and Rapier handles the physics, so you
+walk and jump on real ground and bump into the edge of the world instead of
+falling off it. On phones you get an on-screen joystick and a jump button, right
+after it politely asks you to turn your phone sideways. There's music too.
+
+3D models get heavy fast, so I compressed them with gltf-pipeline and put a
+loading screen in front of the wait. Lighthouse and Vercel Speed Insights told me
+when I was making it slow.
