@@ -1,0 +1,25 @@
+---
+name: This site
+status: live
+description: A word globe you can grab and fling. Scroll, and the colored words fall off it as notes onto the wall.
+tags: ['astro', 'preact', 'canvas']
+repo: https://github.com/kent-caparas/Portfolio
+featured: true
+order: 1
+---
+
+The globe is a plain 2D canvas. No WebGL and no 3D library. The words sit on a
+fibonacci sphere and get projected by hand every frame.
+
+- Drag it and it keeps the spin you gave it, then eases back to its own drift.
+- Scroll and it shrinks into the corner. Once its words get too small to read,
+  they turn into dots.
+- Each colored word is a note. When the note's spot on the wall scrolls into view,
+  it lets go of the globe and falls there on a spring, so it bounces a little
+  when it lands. Scroll back up and it flies home.
+- Click a colored word and the page takes you to its note.
+- **tidy up** moves every note into a neat grid, one after another. **mess it up**
+  puts them back.
+
+With reduced motion on, the globe holds still and the notes are already in
+place. With JavaScript off, the wall is a plain grid you can still read.

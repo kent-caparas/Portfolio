@@ -5,9 +5,9 @@ export async function GET(context) {
   const posts = await getPublishedPosts();
 
   return rss({
-    title: 'kent caparas — logbook',
+    title: 'Kent Caparas, writing',
     description:
-      'postmortems, teardowns, patch notes, and field notes from the logbook.',
+      'Notes from deploying AI with real teams, the things I build, and whatever I learned this week.',
     site: context.site,
     items: posts.map((post) => ({
       title: post.data.title,

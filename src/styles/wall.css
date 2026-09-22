@@ -85,7 +85,7 @@
 
 .wall-btn {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--color-bg);
   background: var(--color-accent);
@@ -155,13 +155,6 @@
 
 .wall-note {
   position: absolute;
-  width: 230px;
-  padding: 14px 16px 12px;
-  border-radius: 2px;
-  background: var(--color-bg-soft);
-  box-shadow:
-    0 1px 1px color-mix(in srgb, var(--color-ink) 10%, transparent),
-    0 8px 18px color-mix(in srgb, var(--color-ink) 14%, transparent);
   cursor: grab;
   touch-action: none;
   user-select: none;
@@ -170,98 +163,6 @@
 
 .wall-note.is-dragging {
   cursor: grabbing;
-  box-shadow:
-    0 2px 2px color-mix(in srgb, var(--color-ink) 14%, transparent),
-    0 16px 30px color-mix(in srgb, var(--color-ink) 22%, transparent);
-}
-
-.wall-note[data-topic='feedback'] {
-  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg));
-}
-
-.wall-note[data-topic='idea'] {
-  background: color-mix(in srgb, var(--color-good) 14%, var(--color-bg));
-}
-
-.wall-note[data-topic='collab'] {
-  background: color-mix(in srgb, var(--color-ink-dim) 14%, var(--color-bg));
-}
-
-.wall-note[data-topic='hello'] {
-  background: var(--color-bg-soft);
-}
-
-.wall-note__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.wall-note__name {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-variant: small-caps;
-  letter-spacing: 0.03em;
-  color: var(--color-ink);
-  overflow-wrap: anywhere;
-  min-width: 0;
-}
-
-.wall-note__topic {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-ink-faint);
-  white-space: nowrap;
-}
-
-.wall-note__body {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--color-ink);
-  margin: 0 0 10px;
-  overflow-wrap: anywhere;
-}
-
-.wall-note__time {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--color-ink-faint);
-}
-
-/* ── blank "new note" affordance ───────────────────────────────── */
-.wall-note--new {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  align-items: flex-start;
-  justify-content: center;
-  min-height: 96px;
-  background: color-mix(in srgb, var(--color-accent) 6%, var(--color-bg)) !important;
-  border: 1px dashed var(--color-accent);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-ink) 10%, transparent);
-}
-
-.wall-note--new:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-.wall-note--new__label {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.03em;
-  color: var(--color-accent);
-}
-
-.wall-note--new__hint {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--color-ink-faint);
 }
 
 /* ── dialog ────────────────────────────────────────────────────── */
@@ -286,10 +187,10 @@
 .wall-dialog__panel {
   width: min(440px, calc(100vw - 32px));
   background: var(--color-bg);
-  border: 1px solid var(--color-line);
-  border-radius: 6px;
+  border: 2px solid var(--note-edge);
+  border-radius: 0;
   padding: 18px;
-  box-shadow: 0 20px 60px color-mix(in srgb, var(--color-ink) 35%, transparent);
+  box-shadow: 6px 6px 0 var(--note-edge);
 }
 
 .wall-dialog__head {
@@ -300,7 +201,7 @@
 }
 
 .wall-dialog__title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 20px;
 }
@@ -345,20 +246,23 @@
 .wall-empty__note {
   width: 230px;
   padding: 28px 20px;
-  border-radius: 2px;
-  background: var(--color-bg-soft);
-  box-shadow:
-    0 1px 1px color-mix(in srgb, var(--color-ink) 10%, transparent),
-    0 8px 18px color-mix(in srgb, var(--color-ink) 14%, transparent);
+  border: 2px solid var(--note-edge);
+  background: var(--note-hello);
+  box-shadow: 4px 4px 0 var(--note-edge);
   transform: rotate(-3deg);
   text-align: center;
 }
 
 .wall-empty__text {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-style: italic;
   font-size: 22px;
-  color: var(--color-ink-faint);
+  color: var(--note-ink-faint);
+}
+
+[data-theme='dusk'] .wall-empty__note {
+  border-radius: 6px;
+  box-shadow: 0 0 0 3px var(--color-bg);
 }
 
 /* ── mobile: drop the scatter, stack honestly ──────────────────── */
@@ -420,7 +324,7 @@
 
 .admin-tab {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--color-ink-dim);
   background: transparent;
@@ -449,7 +353,7 @@
 
 .admin-logout {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--color-ink-dim);
   background: transparent;
   border: 1px solid var(--color-line);
@@ -465,7 +369,7 @@
 
 .admin-empty {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 11px;
   color: var(--color-ink-faint);
   padding: 24px 0;
 }
@@ -496,14 +400,14 @@
 
 .admin-row__name {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
   font-variant: small-caps;
   color: var(--color-ink);
 }
 
 .admin-row__topic {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-ink-faint);
@@ -511,7 +415,7 @@
 
 .admin-row__id {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--color-ink-faint);
   margin-left: auto;
 }
@@ -540,7 +444,7 @@
 
 .admin-act {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--color-ink-dim);
   background: var(--color-bg);
   border: 1px solid var(--color-line);

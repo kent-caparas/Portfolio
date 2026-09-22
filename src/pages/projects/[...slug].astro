@@ -1,9 +1,7 @@
 ---
 import { render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Header from '@/components/Header.astro';
-import Footer from '@/components/Footer.astro';
-import { getProjects, statusLabel } from '@/features/projects/lib/projects';
+import { getProjects, projectTransitionName, statusLabel } from '@/features/projects/lib/projects';
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -18,19 +16,17 @@ const { name, status, description, tags, repo, demo } = project.data;
 const { Content } = await render(project);
 ---
 
-<BaseLayout title={`${name} — kent caparas`} description={description}>
-  <Header homeLink />
-
+<BaseLayout title={`${name}, Kent Caparas`} description={description}>
   <article>
     <div class="project-head">
       <div class="row">
-        <h1>{name}</h1>
+        <h1 style={`view-transition-name: ${projectTransitionName(project)}`}>{name}</h1>
         <span class={`status ${status}`}>{statusLabel(status)}</span>
       </div>
       <p class="desc">{description}</p>
       <div class="tags">{tags.map((tag) => <span>{tag}</span>)}</div>
       <div class="links">
-        {demo && <a href={demo} rel="noopener" target="_blank">demo →</a>}
+        {demo && <a href={demo} rel="noopener" target="_blank">visit →</a>}
         {repo && <a href={repo} rel="noopener" target="_blank">source →</a>}
       </div>
     </div>
@@ -39,14 +35,13 @@ const { Content } = await render(project);
       <Content />
     </div>
 
-    <p class="back"><a href="/projects">← back to builds</a></p>
+    <p class="back"><a href="/projects">← All work</a></p>
   </article>
-
-  <Footer />
 </BaseLayout>
 
 <style>
   .project-head {
+    padding-top: 40px;
     margin-bottom: 40px;
     padding-bottom: 32px;
     border-bottom: 1px solid var(--color-line);
@@ -60,9 +55,10 @@ const { Content } = await render(project);
   }
 
   h1 {
-    font-family: var(--font-serif);
-    font-weight: 800;
-    font-size: clamp(32px, 6vw, 48px);
+    font-family: var(--font-display);
+    margin: 0;
+    font-weight: 700;
+    font-size: clamp(34px, 6vw, 52px);
     letter-spacing: -0.02em;
     line-height: 1.05;
   }
@@ -100,17 +96,13 @@ const { Content } = await render(project);
     font-size: 11px;
     color: var(--color-ink-faint);
   }
-  .tags span::before {
-    content: '#';
-    opacity: 0.5;
-  }
 
   .links {
     display: flex;
     gap: 18px;
     margin-top: 18px;
     font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: 11px;
   }
   .links a {
     color: var(--color-accent);
@@ -122,19 +114,36 @@ const { Content } = await render(project);
   }
 
   .prose {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 19px;
     line-height: 1.7;
     color: var(--color-ink);
   }
-  .prose :global(p) {
+  .prose :global(p),
+  .prose :global(ul) {
     margin: 0 0 20px;
+  }
+  .prose :global(ul) {
+    padding-left: 1.2em;
+  }
+  .prose :global(li + li) {
+    margin-top: 8px;
+  }
+  .prose :global(a) {
+    color: var(--color-accent);
+  }
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+    background: var(--color-bg-soft);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
   }
 
   .back {
     margin-top: 56px;
     font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: 11px;
   }
   .back a {
     color: var(--color-ink-dim);

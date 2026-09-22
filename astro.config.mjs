@@ -9,7 +9,7 @@ import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://portfolio.example.com',
+  site: 'https://kcaparas.dev',
   integrations: [mdx(), preact(), sitemap()],
 
   vite: {

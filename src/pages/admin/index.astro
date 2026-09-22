@@ -2,7 +2,6 @@
 export const prerender = false;
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Header from '@/components/Header.astro';
 import AdminLogin from '@/features/wall/components/AdminLogin.tsx';
 import { ADMIN_COOKIE, verifyAdminCookieValue } from '@/server/wall/admin-auth';
 import '@/styles/wall.css';
@@ -11,8 +10,6 @@ const authed = verifyAdminCookieValue(Astro.cookies.get(ADMIN_COOKIE)?.value);
 ---
 
 <BaseLayout title="admin — kent caparas" description="restricted area.">
-  <Header homeLink />
-
   <section class="admin-intro">
     <h2>admin</h2>
     {
@@ -54,7 +51,7 @@ const authed = verifyAdminCookieValue(Astro.cookies.get(ADMIN_COOKIE)?.value);
   }
 
   h2 {
-    font-family: var(--font-serif);
+    font-family: var(--font-display);
     font-weight: 800;
     font-size: clamp(28px, 4vw, 40px);
     letter-spacing: -0.02em;

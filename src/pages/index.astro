@@ -1,49 +1,72 @@
 ---
+import { getImage } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Header from '@/components/Header.astro';
-import SectionLabel from '@/components/SectionLabel.astro';
-import Footer from '@/components/Footer.astro';
-import PostRow from '@/features/blog/components/PostRow.astro';
-import ProjectRow from '@/features/projects/components/ProjectRow.astro';
-import AboutSection from '@/features/about/components/AboutSection.astro';
-import { getRecentPosts } from '@/features/blog/lib/posts';
-import { getFeaturedProjects } from '@/features/projects/lib/projects';
+import Hero from '@/widgets/hero/Hero.astro';
+import Board from '@/features/board/components/Board.tsx';
+import { ABOUT_NOTES, LINK_NOTES, type BoardItem } from '@/features/board/lib/board-items';
+import { getFeaturedProjects, statusLabel } from '@/features/projects/lib/projects';
+import { formatStamp, getRecentPosts } from '@/features/blog/lib/posts';
+import portrait from '@/assets/portrait.jpg';
+import '@/styles/notes.css';
+import '@/features/board/board.css';
 
-const recentPosts = await getRecentPosts(4);
-const featuredProjects = await getFeaturedProjects();
-const lastUpdated = recentPosts[0]?.data.date ?? new Date();
+const [projects, posts] = await Promise.all([getFeaturedProjects(), getRecentPosts(3)]);
+const photo = await getImage({ src: portrait, width: 480, widths: [240, 480], format: 'webp' });
+
+function readingLabel(minutes: number | undefined): string | undefined {
+  if (!minutes) return undefined;
+  return `${minutes} min read`;
+}
+
+const photoNote: BoardItem = {
+  id: 'photo',
+  kind: 'photo',
+  word: 'kent',
+  label: "that's me.",
+  image: {
+    src: photo.src,
+    srcset: photo.srcSet.attribute,
+    alt: 'Kent Caparas in a cream blazer, seated at a table',
+  },
+};
+
+const postNotes: BoardItem[] = posts.map((post) => ({
+  id: `post-${post.id}`,
+  kind: 'post',
+  word: post.data.title.toLowerCase(),
+  label: 'writing',
+  meta: formatStamp(post.data.date),
+  title: post.data.title,
+  body: readingLabel(post.data.readingTime),
+  href: `/blog/${post.id}`,
+}));
+
+const projectNotes: BoardItem[] = projects.map((project) => ({
+  id: `project-${project.id}`,
+  kind: 'project',
+  word: project.data.name.toLowerCase(),
+  label: 'work',
+  meta: statusLabel(project.data.status),
+  title: project.data.name,
+  body: project.data.description,
+  href: `/projects/${project.id}`,
+}));
+
+const items = [photoNote, ...ABOUT_NOTES, ...postNotes, ...projectNotes, ...LINK_NOTES];
+const looseWords = items.flatMap(({ id, word }) => (word ? [{ id, word }] : []));
 ---
 
 <BaseLayout>
-  <Header />
-
-  <section id="log">
-    <SectionLabel text="recent log entries" />
-    {recentPosts.map((post) => <PostRow post={post} />)}
+  <Hero looseWords={looseWords} />
+  <section class="wall-section" id="wall">
+    <Board client:load items={items} />
   </section>
-
-  <section id="builds">
-    <SectionLabel text="builds & experiments" />
-    <div class="projects">
-      {featuredProjects.map((project) => <ProjectRow project={project} />)}
-    </div>
-  </section>
-
-  <section id="about">
-    <SectionLabel text="// about" />
-    <AboutSection imgSrc="/1000014637.jpg" />
-  </section>
-
-  <Footer lastUpdated={lastUpdated} />
 </BaseLayout>
 
 <style>
-  section {
-    margin-bottom: 72px;
-  }
-
-  .projects {
-    display: grid;
-    gap: 0;
+  .wall-section {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    padding-top: 24px;
   }
 </style>

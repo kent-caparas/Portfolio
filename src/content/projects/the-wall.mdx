@@ -1,0 +1,19 @@
+---
+name: The wall
+status: live
+description: A public sticky-note wall. Claude checks every note before it sticks, and anything it's unsure about waits for me.
+tags: ['preact', 'claude api', 'upstash']
+featured: true
+order: 2
+---
+
+A place for visitors to leave a question, an idea, or something they learned.
+[Open the wall](/wall).
+
+Each note goes through a moderation prompt that treats the note as data, never
+as instructions. Only confident approvals go live. A low score or a failed
+call puts the note in a queue for me to review. A moderation failure can never
+become an approval.
+
+Submissions are rate limited per hour. Notes can be dragged around, and the
+layout is seeded from each note's id, so every visitor sees the same scatter.

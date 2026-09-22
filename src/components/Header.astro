@@ -1,228 +1,81 @@
 ---
 import Nav from './Nav.astro';
+import ThemeToggle from '@/features/theme/components/ThemeToggle.astro';
 
-interface Props {
-  /** Whether the name links back home (true on inner pages). */
-  homeLink?: boolean;
-}
-
-const { homeLink = false } = Astro.props;
-
-const NAME = 'kent caparas';
-const VERSION = 'v0.4.1';
+const isHome = Astro.url.pathname === '/';
 ---
 
-<header>
-  <div class="boot-feed" data-boot>
-    <span class="boot-line">&gt; mounting logbook…</span>
-    <span class="boot-line">&gt; 64 fragments indexed · 4 live</span>
-  </div>
-
-  <div class="system-line" data-boot>
-    <span>SYS::LOGBOOK {VERSION}</span>
-    <span>ONLINE <span class="blink">●</span></span>
-  </div>
-
-  <h1 data-boot>
-    {
-      homeLink ? (
-        <a href="/">
-          <span class="title-glitch" data-text={NAME}>
-            {NAME}
-          </span>
-          <span class="accent">.</span>
-        </a>
-      ) : (
-        <>
-          <span class="title-glitch" data-text={NAME}>
-            {NAME}
-          </span>
-          <span class="accent">.</span>
-        </>
-      )
-    }
-  </h1>
-
-  <p class="tagline" data-boot>
-    <span class="hi">// </span>i build things, then i break them on purpose to
-    see what falls out. sometimes i write about it. occasionally there are
-    dragons.
-  </p>
-
-  <div data-boot>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="/" aria-current={isHome ? 'page' : undefined}>
+      kent caparas<span class="dot">.</span>
+    </a>
     <Nav />
+    <ThemeToggle />
   </div>
 </header>
 
 <style>
-  header {
-    border-bottom: 1px dashed var(--color-line);
-    padding-bottom: 32px;
-    margin-bottom: 56px;
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50; /* above landed and dragged notes */
+    view-transition-name: site-header;
+    background: color-mix(in oklab, var(--color-bg) 86%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-line);
   }
 
-  .boot-feed {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--color-ink-faint);
-    letter-spacing: 0.04em;
-    margin-bottom: 16px;
-  }
-
-  .boot-line:last-child {
-    color: var(--color-good);
-  }
-
-  .system-line {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--color-ink-faint);
-    letter-spacing: 0.05em;
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .blink {
-    color: var(--color-accent);
-    animation: blink 1.2s steps(2) infinite;
-  }
-
-  @keyframes blink {
-    50% {
-      opacity: 0;
+  /* glass and rule fade in over the first 64px of scroll */
+  @supports (animation-timeline: scroll()) {
+    .site-header {
+      animation: header-settle linear both;
+      animation-timeline: scroll();
+      animation-range: 0 64px;
     }
   }
 
-  h1 {
-    font-family: var(--font-serif);
-    font-weight: 800;
-    font-size: clamp(40px, 7vw, 64px);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-bottom: 16px;
-    overflow-wrap: anywhere;
-    min-width: 0;
+  @keyframes header-settle {
+    from {
+      background-color: transparent;
+      border-bottom-color: transparent;
+      backdrop-filter: blur(0);
+    }
   }
 
-  h1 a {
-    color: inherit;
+  .bar {
+    max-width: var(--measure);
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .brand {
+    margin-right: auto;
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
     text-decoration: none;
   }
 
-  h1 .accent {
+  .dot {
     color: var(--color-accent);
-    font-style: italic;
   }
 
-  /* ── title glitch: one-shot RGB split, fired once by the boot timeline ── */
-  .title-glitch {
-    position: relative;
-    display: inline-block;
-  }
-
-  .title-glitch::before,
-  .title-glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .title-glitch.glitching::before {
-    color: var(--color-accent);
-    animation: glitch-r 0.52s steps(2, end) 1;
-  }
-
-  .title-glitch.glitching::after {
-    color: var(--color-good);
-    animation: glitch-g 0.52s steps(2, end) 1;
-  }
-
-  @keyframes glitch-r {
-    0%,
-    100% {
-      opacity: 0;
-      transform: translate(0, 0);
-      clip-path: inset(0 0 0 0);
+  /* phones: brand and toggle share a row, nav gets its own */
+  @media (max-width: 520px) {
+    .bar {
+      flex-wrap: wrap;
+      row-gap: 4px;
+      padding: 12px 20px 10px;
     }
-    12% {
-      opacity: 0.85;
-      transform: translate(-3px, -1px);
-      clip-path: inset(0 0 66% 0);
-    }
-    34% {
-      opacity: 0.7;
-      transform: translate(2px, 1px);
-      clip-path: inset(58% 0 0 0);
-    }
-    58% {
-      opacity: 0.8;
-      transform: translate(-2px, 0);
-      clip-path: inset(32% 0 40% 0);
-    }
-    80% {
-      opacity: 0.6;
-      transform: translate(1px, -1px);
-      clip-path: inset(80% 0 4% 0);
-    }
-  }
-
-  @keyframes glitch-g {
-    0%,
-    100% {
-      opacity: 0;
-      transform: translate(0, 0);
-      clip-path: inset(0 0 0 0);
-    }
-    16% {
-      opacity: 0.7;
-      transform: translate(3px, 1px);
-      clip-path: inset(70% 0 8% 0);
-    }
-    40% {
-      opacity: 0.8;
-      transform: translate(-2px, -1px);
-      clip-path: inset(20% 0 55% 0);
-    }
-    64% {
-      opacity: 0.6;
-      transform: translate(2px, 1px);
-      clip-path: inset(48% 0 22% 0);
-    }
-    86% {
-      opacity: 0.7;
-      transform: translate(-1px, 0);
-      clip-path: inset(4% 0 80% 0);
-    }
-  }
-
-  .tagline {
-    font-size: 15px;
-    color: var(--color-ink-dim);
-    max-width: 480px;
-  }
-
-  .tagline .hi {
-    color: var(--color-ink);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .blink {
-      animation: none;
-    }
-    .title-glitch.glitching::before,
-    .title-glitch.glitching::after {
-      animation: none;
-      opacity: 0;
+    .bar > :global(nav) {
+      order: 3;
+      width: 100%;
     }
   }
 </style>

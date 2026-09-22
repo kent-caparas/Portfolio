@@ -1,212 +1,319 @@
 import { useEffect, useRef } from 'preact/hooks';
 import { GLOBE_WORDS } from '../lib/globe-words';
+import {
+  buildRings,
+  buildWordPoints,
+  rotatePoint,
+  type GlobeWord,
+  type Vec,
+  type WordPoint,
+} from '../lib/globe-geometry';
+import { globePlacement, globeProgress, miniSpot, type GlobePlacement } from '../lib/globe-placement';
+import { fallProgress, wordPoints } from '@/lib/scene';
+import { clamp } from '@/lib/scatter';
 
-type Vec = { x: number; y: number; z: number };
-type WordPoint = Vec & { word: string };
+interface Props {
+  looseWords: GlobeWord[];
+}
 
-export default function GlobeCanvas() {
+interface DrawnWord {
+  id?: string;
+  word: string;
+  x: number;
+  y: number;
+  font: number;
+}
+
+interface DragState {
+  startX: number;
+  startY: number;
+  lastX: number;
+  lastY: number;
+  lastT: number;
+  moved: boolean;
+}
+
+const DRIFT = 0.11; // rad per second, about one turn a minute
+const DRAG_SPEED = 0.0065; // rad per px
+const MAX_FLING = 14; // rad per second
+const REST_TILT = -0.35;
+const DOTS_BELOW = 0.42; // under this scale, words draw as dots
+const DRAG_THRESHOLD = 4;
+
+export default function GlobeCanvas({ looseWords }: Props) {
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    const button = buttonRef.current;
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const ctx = canvas?.getContext('2d');
+    const slot = document.querySelector<HTMLElement>('[data-globe-slot]');
+    const hero = document.querySelector<HTMLElement>('[data-hero]');
+    if (!button || !canvas || !ctx || !slot || !hero) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let w = 0;
-    let h = 0;
-    let cx = 0;
-    let cy = 0;
-    let R = 0;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const header = document.querySelector('header');
+    const toggle = document.querySelector('.theme-toggle');
+    const points = buildWordPoints(looseWords, GLOBE_WORDS);
+    const rings = buildRings();
+
+    let size = 0;
+    let ink = '';
+    let accent = '';
+    let monoFont = 'monospace';
+    let yaw = 0;
+    let tilt = REST_TILT;
+    let yawVel = reduced ? 0 : DRIFT;
+    let place: GlobePlacement = { left: 0, top: 0, scale: 1 };
+    let placeKey = '';
+    let hovered: string | undefined;
+    let drawn: DrawnWord[] = [];
+    let drag: DragState | null = null;
+    let raf = 0;
+    let last = performance.now();
+
+    function kick() {
+      if (!raf) raf = requestAnimationFrame(frame);
+    }
+
+    function readTheme() {
+      const styles = getComputedStyle(document.documentElement);
+      ink = styles.getPropertyValue('--color-ink').trim();
+      accent = styles.getPropertyValue('--color-accent').trim();
+      monoFont = styles.getPropertyValue('--font-mono').trim() || 'monospace';
+      kick();
+    }
 
     function resize() {
-      const rect = canvas!.getBoundingClientRect();
-      w = rect.width;
-      h = rect.height;
-      canvas!.width = w * dpr;
-      canvas!.height = h * dpr;
+      size = slot!.clientWidth;
+      canvas!.width = Math.round(size * dpr);
+      canvas!.height = Math.round(size * dpr);
+      button!.style.width = `${size}px`;
+      button!.style.height = `${size}px`;
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cx = w / 2;
-      cy = h / 2;
-      R = Math.min(w, h) * 0.42;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    // fibonacci-sphere placement, one position per word
-    const N = GLOBE_WORDS.length;
-    const pts: WordPoint[] = [];
-    const phi = Math.PI * (Math.sqrt(5) - 1);
-    for (let i = 0; i < N; i++) {
-      const y = 1 - (i / (N - 1)) * 2;
-      const r = Math.sqrt(1 - y * y);
-      const theta = phi * i;
-      pts.push({
-        x: Math.cos(theta) * r,
-        y,
-        z: Math.sin(theta) * r,
-        word: GLOBE_WORDS[i],
-      });
+      kick();
     }
 
-    // latitude rings for the wireframe feel
-    const latLines: Vec[][] = [];
-    for (let lat = -60; lat <= 60; lat += 30) {
-      const ring: Vec[] = [];
-      const yy = Math.sin((lat * Math.PI) / 180);
-      const rr = Math.cos((lat * Math.PI) / 180);
-      for (let a = 0; a < 360; a += 4) {
-        const rad = (a * Math.PI) / 180;
-        ring.push({ x: Math.cos(rad) * rr, y: yy, z: Math.sin(rad) * rr });
+    function updatePlacement() {
+      const progress = reduced ? 0 : globeProgress(scrollY, hero!.offsetHeight);
+      const headerBottom = header ? header.getBoundingClientRect().bottom : 0;
+      const mini = miniSpot(innerWidth, headerBottom, toggle ? toggle.getBoundingClientRect() : null);
+      place = globePlacement(slot!.getBoundingClientRect(), progress, mini);
+      const key = `${place.left.toFixed(1)} ${place.top.toFixed(1)} ${place.scale.toFixed(4)}`;
+      if (key !== placeKey) {
+        placeKey = key;
+        button!.style.transform = `translate(${place.left}px, ${place.top}px) scale(${place.scale})`;
       }
-      latLines.push(ring);
-    }
-    // longitude rings
-    const lonLines: Vec[][] = [];
-    for (let lon = 0; lon < 360; lon += 30) {
-      const ring: Vec[] = [];
-      const rad = (lon * Math.PI) / 180;
-      for (let a = -90; a <= 90; a += 4) {
-        const arad = (a * Math.PI) / 180;
-        ring.push({
-          x: Math.cos(arad) * Math.cos(rad),
-          y: Math.sin(arad),
-          z: Math.cos(arad) * Math.sin(rad),
-        });
-      }
-      lonLines.push(ring);
+      const parked = progress > 0.98;
+      button!.classList.toggle('is-mini', parked);
+      button!.tabIndex = parked ? 0 : -1;
+      button!.setAttribute('aria-hidden', String(!parked));
     }
 
-    let angle = 0;
-    let baseAngle = 0;
-    let easedScroll = 0;
-    let easedTilt = -0.35; // ~ -20deg resting tilt
-    let sinT = Math.sin(easedTilt);
-    let cosT = Math.cos(easedTilt);
-
-    // scroll "depth": rotates the globe further and tilts it as you descend
-    let scrollProgress = 0;
-    function onScroll() {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      scrollProgress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    // colors come straight from the global.css tokens (single source of
-    // truth) and re-read on theme change. canvas accepts the hex directly;
-    // per-word depth fade uses ctx.globalAlpha, so no rgba string-building.
-    let inkColor = '';
-    let accentColor = '';
-    function readTheme() {
-      const cs = getComputedStyle(document.documentElement);
-      inkColor = cs.getPropertyValue('--color-ink').trim();
-      accentColor = cs.getPropertyValue('--color-accent').trim();
-    }
-    readTheme();
-    const themeObserver = new MutationObserver(readTheme);
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme'],
-    });
-
-    function rotate(p: Vec, a: number): Vec {
-      // y-axis rotation, then x-axis tilt
-      const sa = Math.sin(a);
-      const ca = Math.cos(a);
-      const x1 = p.x * ca + p.z * sa;
-      const z1 = -p.x * sa + p.z * ca;
-      const y1 = p.y;
-      const y2 = y1 * cosT - z1 * sinT;
-      const z2 = y1 * sinT + z1 * cosT;
-      return { x: x1, y: y2, z: z2 };
-    }
-
-    function project(p: Vec) {
-      return { x: cx + p.x * R, y: cy + p.y * R, z: p.z };
-    }
-
-    function drawRing(ring: Vec[]) {
+    function drawRing(ring: Vec[], c: number, R: number, sinT: number, cosT: number) {
       ctx!.beginPath();
       let started = false;
-      for (let i = 0; i < ring.length; i++) {
-        const r = rotate(ring[i], angle);
+      for (const point of ring) {
+        const r = rotatePoint(point, yaw, sinT, cosT);
         if (r.z < -0.05) {
           started = false;
           continue;
         }
-        const pr = project(r);
-        if (!started) {
-          ctx!.moveTo(pr.x, pr.y);
-          started = true;
-        } else {
-          ctx!.lineTo(pr.x, pr.y);
-        }
+        if (started) ctx!.lineTo(c + r.x * R, c + r.y * R);
+        else ctx!.moveTo(c + r.x * R, c + r.y * R);
+        started = true;
       }
       ctx!.stroke();
     }
 
+    function drawWord(point: WordPoint, x: number, y: number, depth: number, k: number) {
+      const loose = Boolean(point.id);
+      const isHovered = loose && point.id === hovered;
+      let font = (9 + depth * 6) * k;
+      if (loose) font *= 1.12;
+      if (isHovered) font *= 1.22;
+      // Departure Mono is a pixel font, it stays crisp on half steps of 11px
+      font = Math.max(11, Math.round(font / 5.5) * 5.5);
+      x = Math.round(x);
+      y = Math.round(y);
+      ctx!.font = `${loose ? 500 : 400} ${font.toFixed(1)}px ${monoFont}`;
+      ctx!.fillStyle = loose ? accent : ink;
+      ctx!.globalAlpha = loose ? 0.5 + depth * 0.5 : 0.15 + depth * 0.45;
+      ctx!.fillText(point.word, x, y);
+      if (isHovered) {
+        const width = ctx!.measureText(point.word).width;
+        ctx!.fillRect(x - width / 2, y + font * 0.62, width, 1.5);
+      }
+      drawn.push({ id: point.id, word: point.word, x, y, font });
+    }
+
+    // dots keep the globe readable once it is corner sized
+    function drawDot(point: WordPoint, x: number, y: number, depth: number) {
+      const loose = Boolean(point.id);
+      ctx!.fillStyle = loose ? accent : ink;
+      ctx!.globalAlpha = loose ? 0.95 : 0.2 + depth * 0.4;
+      ctx!.beginPath();
+      ctx!.arc(x, y, ((loose ? 1.9 : 1.1) * (0.6 + depth * 0.4)) / place.scale, 0, Math.PI * 2);
+      ctx!.fill();
+    }
+
     function draw() {
-      ctx!.clearRect(0, 0, w, h);
+      ctx!.clearRect(0, 0, size, size);
+      const c = size / 2;
+      const R = size * 0.42;
+      const sinT = Math.sin(tilt);
+      const cosT = Math.cos(tilt);
+      const k = clamp(size / 620, 0.8, 1.25);
 
-      // wireframe — accent hue, theme-aware
-      ctx!.strokeStyle = accentColor;
-      ctx!.lineWidth = 1;
-      ctx!.globalAlpha = 0.22;
-      latLines.forEach(drawRing);
-      lonLines.forEach(drawRing);
+      ctx!.strokeStyle = accent;
+      ctx!.lineWidth = 1 / Math.max(place.scale, 0.2);
+      ctx!.globalAlpha = 0.22 + (1 - place.scale) * 0.25;
+      for (const ring of rings) drawRing(ring, c, R, sinT, cosT);
 
-      // words — ink, depth-faded via globalAlpha, front hemisphere only
+      const asDots = place.scale < DOTS_BELOW;
       ctx!.textAlign = 'center';
       ctx!.textBaseline = 'middle';
-      ctx!.fillStyle = inkColor;
-      for (const p of pts) {
-        const r = rotate(p, angle);
+      drawn = [];
+      for (const point of points) {
+        const r = rotatePoint(point, yaw, sinT, cosT);
+        const x = c + r.x * R;
+        const y = c + r.y * R;
+        if (point.id) {
+          wordPoints.set(point.id, { x: place.left + x * place.scale, y: place.top + y * place.scale, scale: place.scale });
+          if ((fallProgress.get(point.id) ?? 0) > 0.02) continue;
+        }
         if (r.z < 0) continue;
-        const pr = project(r);
-        const depth = (r.z + 1) / 2; // 0..1, front = 1
-        const fontSize = 8 + depth * 6; // ~8..14px
-        ctx!.globalAlpha = 0.15 + depth * 0.45;
-        ctx!.font = `${fontSize}px 'IBM Plex Mono', monospace`;
-        ctx!.fillText(p.word, pr.x, pr.y);
+        const depth = (r.z + 1) / 2;
+        if (asDots) drawDot(point, x, y, depth);
+        else drawWord(point, x, y, depth, k);
       }
       ctx!.globalAlpha = 1;
     }
 
-    let raf = 0;
-    const reduced = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
-
-    if (reduced) {
-      draw(); // one static frame, no loop
-    } else {
-      const loop = () => {
-        baseAngle += 0.0018; // slow drift, ~1 revolution / minute
-        // ease toward scroll-driven targets so it never snaps
-        const targetScroll = scrollProgress * Math.PI * 1.6;
-        easedScroll += (targetScroll - easedScroll) * 0.06;
-        angle = baseAngle + easedScroll;
-
-        const targetTilt = -0.35 - scrollProgress * 0.28;
-        easedTilt += (targetTilt - easedTilt) * 0.06;
-        sinT = Math.sin(easedTilt);
-        cosT = Math.cos(easedTilt);
-
-        draw();
-        raf = requestAnimationFrame(loop);
-      };
-      raf = requestAnimationFrame(loop);
+    function frame(now: number) {
+      raf = 0;
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      updatePlacement();
+      if (!drag) {
+        if (!reduced) {
+          yawVel += (DRIFT - yawVel) * (1 - Math.exp(-dt * 1.2));
+          tilt += (REST_TILT - tilt) * (1 - Math.exp(-dt * 2.5));
+        }
+        yaw += yawVel * dt;
+      }
+      draw();
+      if (!reduced || drag) kick();
     }
 
+    function looseWordAt(clientX: number, clientY: number): string | undefined {
+      const x = (clientX - place.left) / place.scale;
+      const y = (clientY - place.top) / place.scale;
+      for (const word of drawn) {
+        if (!word.id) continue;
+        const halfWidth = word.word.length * word.font * 0.31 + 6;
+        if (Math.abs(x - word.x) < halfWidth && Math.abs(y - word.y) < word.font) return word.id;
+      }
+      return undefined;
+    }
+
+    function setHovered(id: string | undefined) {
+      if (id === hovered) return;
+      hovered = id;
+      slot!.classList.toggle('is-over-word', Boolean(id));
+      kick();
+    }
+
+    function onPointerDown(event: PointerEvent) {
+      if (event.button !== 0) return;
+      drag = {
+        startX: event.clientX,
+        startY: event.clientY,
+        lastX: event.clientX,
+        lastY: event.clientY,
+        lastT: event.timeStamp,
+        moved: false,
+      };
+      slot!.setPointerCapture(event.pointerId);
+      kick();
+    }
+
+    function onPointerMove(event: PointerEvent) {
+      if (!drag) {
+        setHovered(looseWordAt(event.clientX, event.clientY));
+        return;
+      }
+      const travelled = Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY);
+      if (!drag.moved && travelled < DRAG_THRESHOLD) return;
+      drag.moved = true;
+      slot!.classList.add('is-grabbing', 'was-dragged');
+      const dx = event.clientX - drag.lastX;
+      const dy = event.clientY - drag.lastY;
+      const seconds = Math.max(event.timeStamp - drag.lastT, 1) / 1000;
+      yaw += dx * DRAG_SPEED;
+      tilt = clamp(tilt + dy * DRAG_SPEED * 0.6, -1.2, 0.5);
+      yawVel = yawVel * 0.4 + ((dx * DRAG_SPEED) / seconds) * 0.6;
+      drag.lastX = event.clientX;
+      drag.lastY = event.clientY;
+      drag.lastT = event.timeStamp;
+      kick();
+    }
+
+    function onPointerUp(event: PointerEvent) {
+      if (!drag) return;
+      const wasClick = !drag.moved;
+      // holding still before letting go means no fling
+      const held = event.timeStamp - drag.lastT > 90;
+      yawVel = clamp(held ? 0 : yawVel, -MAX_FLING, MAX_FLING);
+      if (reduced) yawVel = 0;
+      drag = null;
+      slot!.classList.remove('is-grabbing');
+      if (wasClick) {
+        const id = looseWordAt(event.clientX, event.clientY);
+        if (id) dispatchEvent(new CustomEvent('board:focus', { detail: id }));
+      }
+      kick();
+    }
+
+    function onPointerCancel() {
+      drag = null;
+      slot!.classList.remove('is-grabbing');
+    }
+
+    function onButtonClick() {
+      scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    }
+
+    readTheme();
+    resize();
+    button.classList.add('is-ready');
+
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(slot);
+    const themeObserver = new MutationObserver(readTheme);
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    document.fonts?.ready.then(readTheme);
+    slot.addEventListener('pointerdown', onPointerDown);
+    slot.addEventListener('pointermove', onPointerMove);
+    slot.addEventListener('pointerup', onPointerUp);
+    slot.addEventListener('pointercancel', onPointerCancel);
+    slot.addEventListener('pointerleave', () => setHovered(undefined));
+    button.addEventListener('click', onButtonClick);
+    addEventListener('scroll', kick, { passive: true });
+
     return () => {
-      window.removeEventListener('resize', resize);
-      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+      resizeObserver.disconnect();
       themeObserver.disconnect();
-      if (raf) cancelAnimationFrame(raf);
+      removeEventListener('scroll', kick);
     };
   }, []);
 
-  return <canvas ref={canvasRef} class="globe-canvas" aria-hidden="true" />;
+  return (
+    <button ref={buttonRef} type="button" class="globe" tabIndex={-1} aria-hidden="true" aria-label="Back to the top">
+      <canvas ref={canvasRef} />
+    </button>
+  );
 }
