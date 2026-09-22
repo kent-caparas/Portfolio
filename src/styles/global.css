@@ -1,20 +1,62 @@
 @import "tailwindcss";
 
+/* Colors: Sanzo Wada, A Dictionary of Color Combinations (1930s), hex from
+ * github.com/mattdesl/dictionary-of-colour-combinations. Ratios are against --color-bg. */
 @theme {
-  --color-bg: #f3ede0;          /* warm paper */
-  --color-bg-soft: #ebe3d2;     /* deeper paper */
-  --color-ink: #1f1b16;         /* near-black ink */
-  --color-ink-dim: #6b6354;     /* muted body */
-  --color-ink-faint: #a89e88;   /* faint captions */
-  --color-accent: #8a2a2a;      /* muted oxblood */
-  --color-accent-soft: #b04a3a; /* hover accent */
-  --color-good: #4a6b3a;        /* deep moss — "live" status */
-  --color-line: #d4ccba;        /* paper rule */
-  --color-glow: 138, 42, 42;    /* accent rgb for glows/scanlines */
+  --color-bg: #bce4e5;          /* Nile Blue, combination 306 */
+  --color-bg-soft: #ffffff;
+  --color-ink: #051230;         /* Deep Indigo, 13.5:1 */
+  --color-ink-dim: #12354e;     /* Dark Tyrian Blue, 9.3:1 */
+  --color-ink-faint: #4c656a;   /* Dark Medici Blue, 10% darker to pass, 4.6:1 */
+  --color-accent: #005b8d;      /* Helvetia Blue, 5.3:1 */
+  --color-accent-soft: #f48067; /* Grenadine Pink, combination 6, fills only */
+  --color-good: #1f6b45;        /* Cobalt Green darkened to pass, 4.7:1 */
+  --color-line: #a5c8d1;        /* Light Glaucous Blue */
+  --color-glow: 0, 91, 141;     /* accent rgb for tints */
 
-  --font-serif: 'Source Serif 4 Variable', Georgia, serif;
-  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-display: 'Basteleur', Georgia, serif;
+  --font-sans: 'Karrik', Arial, sans-serif;
+  --font-mono: 'Departure Mono', ui-monospace, monospace;
+}
+
+:root[data-theme="dusk"] {
+  --color-bg: #051230;          /* Deep Indigo */
+  --color-bg-soft: #12354e;     /* Dark Tyrian Blue */
+  --color-ink: #bce4e5;         /* Nile Blue, 13.5:1 */
+  --color-ink-dim: #97acc8;     /* Salvia Blue, 8.0:1 */
+  --color-ink-faint: #5a82b3;   /* Olympic Blue, 4.7:1 */
+  --color-accent: #f48067;      /* Grenadine Pink, 7.2:1 */
+  --color-accent-soft: #fdd4bd; /* Seashell Pink */
+  --color-good: #96d1aa;        /* Cobalt Green */
+  --color-line: #34454c;        /* Slate Color */
+  --color-glow: 244, 128, 103;
+  color-scheme: dark;
+
+  /* at night every note is a menu window, 9.3:1 and 5.5:1 */
+  --note-hello: #12354e;
+  --note-idea: #12354e;
+  --note-feedback: #12354e;
+  --note-collab: #12354e;
+  --note-ink: #bce4e5;
+  --note-ink-faint: #97acc8;
+  --note-edge: #bce4e5;
+}
+
+:root {
+  /* Wada paper, the same colors as real sticky notes */
+  --note-hello: #ffffff;
+  --note-idea: #96d1aa;         /* Cobalt Green */
+  --note-feedback: #fdd4bd;     /* Seashell Pink */
+  --note-collab: #f8ed43;       /* Lemon Yellow */
+  --note-ink: #051230;
+  --note-ink-faint: #12354e;    /* 4.5:1 or better on every paper */
+  --note-edge: #051230;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.18s;
+  --dur-mid: 0.45s;
+  --measure: 760px;
 }
 
 *,
@@ -24,8 +66,8 @@
 }
 
 html {
-  scroll-behavior: smooth;
   overflow-x: clip;
+  scroll-padding-top: 88px;
 }
 
 body {
@@ -36,14 +78,29 @@ body {
   font-size: 15px;
   line-height: 1.65;
   min-height: 100vh;
-  position: relative;
   overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(var(--color-glow), 0.18);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 .wrap {
-  max-width: 760px;
+  max-width: var(--measure);
   margin: 0 auto;
-  padding: 60px 32px 120px;
-  position: relative;
-  z-index: 3;
+  padding: 48px 24px 0;
+}
+
+@media (max-width: 520px) {
+  .wrap {
+    padding: 24px 20px 0;
+  }
 }

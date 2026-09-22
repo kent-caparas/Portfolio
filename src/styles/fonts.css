@@ -1,0 +1,39 @@
+/* Self-hosted OFL fonts, licenses sit next to each file in public/fonts.
+ * Basteleur: Keussel / Velvetyne, 2021. Karrik: Velvetyne / Phantom Foundry, 2020. Departure Mono: Helena Zhang, 2024. */
+
+@font-face {
+  font-family: 'Basteleur';
+  src: url('/fonts/basteleur/Basteleur-Moonlight.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Basteleur';
+  src: url('/fonts/basteleur/Basteleur-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Karrik';
+  src: url('/fonts/karrik/Karrik-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Karrik';
+  src: url('/fonts/karrik/Karrik-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* a pixel font, crisp at multiples of 11px */
+@font-face {
+  font-family: 'Departure Mono';
+  src: url('/fonts/departure-mono/DepartureMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}

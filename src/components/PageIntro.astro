@@ -1,0 +1,51 @@
+---
+interface Props {
+  title: string;
+  lede?: string;
+}
+
+const { title, lede } = Astro.props;
+---
+
+<div class="page-intro">
+  <h1>{title}</h1>
+  {lede && <p>{lede}</p>}
+</div>
+
+<style>
+  .page-intro {
+    padding: 40px 0 48px;
+  }
+
+  h1 {
+    margin: 0 0 12px;
+    font-family: var(--font-display);
+    font-size: clamp(38px, 7vw, 60px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    margin: 0;
+    max-width: 520px;
+    font-size: 17px;
+    color: var(--color-ink-dim);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .page-intro > * {
+      animation: rise 0.6s var(--ease-out) both;
+    }
+    p {
+      animation-delay: 80ms;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      translate: 0 12px;
+    }
+  }
+</style>

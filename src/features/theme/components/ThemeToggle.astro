@@ -1,58 +1,82 @@
 ---
-/* Dusk-mode toggle. Vanilla: a button + inline script that flips data-theme on
- * <html> and persists it. Icon + label are CSS-driven off [data-theme] so the
- * correct state shows before any JS runs (no flash). */
+/* Dusk toggle. The icon is driven by [data-theme] in CSS, so it is right
+ * before any JS runs. The switch spreads as a circle from the button. */
 ---
 
-<button
-  type="button"
-  class="theme-toggle"
-  aria-label="toggle dusk mode"
-  aria-pressed="false"
->
-  <span class="glyph" aria-hidden="true"></span>
-  <span class="label"></span>
+<button type="button" class="theme-toggle" aria-label="Dusk theme" aria-pressed="false">
+  <svg class="sun" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+  </svg>
+  <svg class="moon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path>
+  </svg>
 </button>
 
 <script is:inline>
   (() => {
     const btn = document.currentScript.previousElementSibling;
     const root = document.documentElement;
-    const sync = () =>
-      btn.setAttribute(
-        'aria-pressed',
-        root.getAttribute('data-theme') === 'dusk' ? 'true' : 'false',
-      );
-    sync();
-    btn.addEventListener('click', () => {
-      const toDusk = root.getAttribute('data-theme') !== 'dusk';
-      root.classList.add('theme-transition');
+    const isDusk = () => root.getAttribute('data-theme') === 'dusk';
+    const sync = () => btn.setAttribute('aria-pressed', String(isDusk()));
+
+    const apply = () => {
+      const toDusk = !isDusk();
       if (toDusk) root.setAttribute('data-theme', 'dusk');
       else root.removeAttribute('data-theme');
       try {
         localStorage.setItem('theme', toDusk ? 'dusk' : 'paper');
       } catch (_) {}
       sync();
-      setTimeout(() => root.classList.remove('theme-transition'), 950);
+    };
+
+    const reveal = () => {
+      const box = btn.getBoundingClientRect();
+      const x = box.left + box.width / 2;
+      const y = box.top + box.height / 2;
+      const r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      root.classList.add('theme-switching');
+      const transition = document.startViewTransition(apply);
+      transition.ready.then(
+        () =>
+          root.animate(
+            { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+            {
+              duration: 650,
+              easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+              pseudoElement: '::view-transition-new(root)',
+            },
+          ),
+        () => {},
+      );
+      transition.finished.finally(() => root.classList.remove('theme-switching'));
+    };
+
+    sync();
+    btn.addEventListener('click', () => {
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!document.startViewTransition || reduced) {
+        apply();
+        return;
+      }
+      reveal();
     });
   })();
 </script>
 
 <style>
   .theme-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: transparent;
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
     border: 1px solid var(--color-line);
-    border-radius: 999px;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    border-radius: 50%;
+    background: transparent;
     color: var(--color-ink-dim);
+    cursor: pointer;
     transition:
       color var(--dur-fast) var(--ease-out),
       border-color var(--dur-fast) var(--ease-out),
@@ -65,43 +89,43 @@
     background: rgba(var(--color-glow), 0.06);
   }
 
-  .theme-toggle:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
+  svg {
+    grid-area: 1 / 1;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition:
+      opacity var(--dur-mid) var(--ease-out),
+      rotate var(--dur-mid) var(--ease-out),
+      scale var(--dur-mid) var(--ease-out);
   }
 
-  .glyph {
-    font-size: 13px;
-    line-height: 1;
-    color: var(--color-accent);
-    transition: transform var(--dur-mid) var(--ease-out);
+  .moon {
+    opacity: 0;
+    rotate: -90deg;
+    scale: 0.6;
   }
 
-  /* CSS-driven state — correct before JS, no flash */
-  .glyph::before {
-    content: '\2600'; /* ☀ paper */
-  }
-  .label::before {
-    content: 'paper';
-  }
-  :global([data-theme='dusk']) .glyph::before {
-    content: '\263E'; /* ☾ dusk */
-  }
-  :global([data-theme='dusk']) .label::before {
-    content: 'dusk';
+  :global([data-theme='dusk']) .sun {
+    opacity: 0;
+    rotate: 90deg;
+    scale: 0.6;
   }
 
-  .theme-toggle:hover .glyph {
-    transform: rotate(-18deg);
+  :global([data-theme='dusk']) .moon {
+    opacity: 1;
+    rotate: 0deg;
+    scale: 1;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .glyph,
+    svg,
     .theme-toggle {
       transition: none;
-    }
-    .theme-toggle:hover .glyph {
-      transform: none;
     }
   }
 </style>

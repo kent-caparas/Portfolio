@@ -1,110 +1,97 @@
 ---
-import { statusLabel, type Project } from '../lib/projects';
+import { projectTransitionName, statusLabel, type Project } from '../lib/projects';
 
 interface Props {
   project: Project;
 }
 
 const { project } = Astro.props;
-const { name, status, description, tags, repo, demo } = project.data;
-
-// Prefer the demo link, then repo, then the project detail page.
-const href = demo ?? repo ?? `/projects/${project.id}`;
-const external = href.startsWith('http');
+const { name, status, description, tags } = project.data;
+const href = `/projects/${project.id}`;
 ---
 
-<a
-  href={href}
-  class="project"
-  data-reveal
-  rel={external ? 'noopener' : undefined}
-  target={external ? '_blank' : undefined}
->
-  <div class="project-header">
-    <div class="project-name">{name}</div>
-    <div class={`project-status ${status}`}>{statusLabel(status)}</div>
+<a href={href} class="row" data-reveal>
+  <div class="head">
+    <h3 class="name" style={`view-transition-name: ${projectTransitionName(project)}`}>
+      {name}
+    </h3>
+    <span class={`status ${status}`}>{statusLabel(status)}</span>
   </div>
-  <div class="project-desc">{description}</div>
-  <div class="project-tags">
+  <p class="desc">{description}</p>
+  <div class="tags">
     {tags.map((tag) => <span>{tag}</span>)}
   </div>
 </a>
 
 <style>
-  .project {
+  .row {
     display: block;
-    padding: 24px 0;
+    padding: 22px 0;
     border-bottom: 1px solid var(--color-line);
-    text-decoration: none;
     color: inherit;
-    position: relative;
-    transition:
-      padding 0.2s ease,
-      background 0.2s ease;
+    text-decoration: none;
   }
 
-  .project:hover {
-    padding-left: 12px;
-    background: linear-gradient(90deg, rgba(138, 42, 42, 0.05), transparent);
-  }
-
-  .project-header {
+  .head {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 8px;
     gap: 16px;
+    margin-bottom: 6px;
   }
 
-  .project-name {
-    font-family: var(--font-serif);
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.005em;
-    transition: color 0.15s;
+  .name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 650;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    transition: color var(--dur-fast) var(--ease-out);
   }
 
-  .project:hover .project-name {
+  .row:hover .name {
     color: var(--color-accent);
   }
 
-  .project-status {
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: var(--color-ink-faint);
+    font-size: 11px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     white-space: nowrap;
+    color: var(--color-ink-faint);
   }
 
-  .project-status.live {
+  .status.live {
     color: var(--color-good);
   }
-  .project-status.broken {
-    color: var(--color-accent);
-  }
-  .project-status.wip {
-    color: var(--color-ink-dim);
+
+  .status.live::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
   }
 
-  .project-desc {
-    color: var(--color-ink-dim);
-    font-size: 14px;
+  .desc {
+    margin: 0 0 10px;
+    max-width: 600px;
+    font-size: 14.5px;
     line-height: 1.55;
-    margin-bottom: 10px;
+    color: var(--color-ink-dim);
   }
 
-  .project-tags {
+  .tags {
     display: flex;
-    gap: 12px;
     flex-wrap: wrap;
+    gap: 14px;
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--color-ink-faint);
-  }
-
-  .project-tags span::before {
-    content: '#';
-    opacity: 0.5;
   }
 </style>

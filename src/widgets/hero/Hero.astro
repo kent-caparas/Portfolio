@@ -1,0 +1,264 @@
+---
+import GlobeCanvas from '@/features/globe/components/GlobeCanvas.tsx';
+import type { GlobeWord } from '@/features/globe/lib/globe-geometry';
+
+interface Props {
+  looseWords: GlobeWord[];
+}
+
+const { looseWords } = Astro.props;
+---
+
+<section class="hero" data-hero>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1>
+        <span class="glitch" data-text="kent caparas.">kent caparas<span class="dot">.</span></span>
+      </h1>
+      <p class="tagline"><span class="slashes">//</span> i build things. use cases excite me.</p>
+      <p class="role">
+        ai forward deployed developer at
+        <a href="https://trelent.com" rel="noopener" target="_blank">trelent</a>. i wire private ai into the
+        workflows quietly draining a team's hours.
+      </p>
+    </div>
+
+    <div class="globe-slot" data-globe-slot>
+      <GlobeCanvas client:load looseWords={looseWords} />
+      <p class="globe-hint" aria-hidden="true">drag to spin · click a <span>colored</span> word</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-top: -48px;
+  }
+
+  .hero-inner {
+    max-width: 1120px;
+    min-height: calc(100svh - 64px);
+    margin: 0 auto;
+    padding: 0 24px 48px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-text {
+    position: relative;
+    z-index: 2;
+  }
+
+  h1 {
+    margin: 0 0 24px;
+    font-family: var(--font-display);
+    font-size: clamp(46px, 7vw, 90px); /* Basteleur runs wide */
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+  }
+
+  .dot {
+    color: var(--color-accent-soft);
+  }
+
+  .tagline {
+    margin: 0 0 12px;
+    font-size: 19px;
+    color: var(--color-ink-dim);
+  }
+
+  .slashes {
+    color: var(--color-ink);
+  }
+
+  .role {
+    margin: 0;
+    max-width: 360px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--color-ink-faint);
+  }
+
+  .role a {
+    color: var(--color-ink-dim);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line);
+    text-underline-offset: 0.2em;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .role a:hover {
+    color: var(--color-accent);
+  }
+
+  /* ── globe ── */
+  .globe-slot {
+    position: relative;
+    justify-self: end;
+    width: min(640px, 100%);
+    aspect-ratio: 1;
+    touch-action: pan-y;
+    cursor: grab;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .globe-slot.is-over-word {
+    cursor: pointer;
+  }
+
+  .globe-slot.is-grabbing {
+    cursor: grabbing;
+  }
+
+  .globe-hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-faint);
+    transition: opacity 0.6s var(--ease-out);
+  }
+
+  .globe-hint span {
+    color: var(--color-accent);
+  }
+
+  .globe-slot.was-dragged .globe-hint {
+    opacity: 0;
+  }
+
+  /* the hint leaves with the globe */
+  @supports (animation-timeline: scroll()) {
+    .globe-hint {
+      animation: hint-out linear both;
+      animation-timeline: scroll();
+      animation-range: 0 160px;
+    }
+  }
+
+  @keyframes hint-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* fixed to the viewport so it can shrink into the corner, JS sets size and place */
+  .globe-slot :global(.globe) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    padding: 0;
+    border: 0;
+    background: none;
+    transform-origin: 0 0;
+    pointer-events: none;
+    visibility: hidden;
+    will-change: transform;
+  }
+
+  .globe-slot :global(.globe.is-ready) {
+    visibility: visible;
+  }
+
+  .globe-slot :global(.globe canvas) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .globe-slot :global(.globe.is-mini) {
+    z-index: 60; /* parks above the header */
+    pointer-events: auto;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+
+  .globe-slot :global(.globe.is-mini:focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 760px) {
+    .hero {
+      margin-top: -24px;
+    }
+    .hero-inner {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding: 0 20px 40px;
+      gap: 8px;
+    }
+    .globe-slot {
+      order: -1;
+      justify-self: center;
+      width: min(440px, 100%);
+    }
+  }
+
+  /* reduced motion: the globe stays in its slot */
+  @media (prefers-reduced-motion: reduce) {
+    .globe-slot :global(.globe) {
+      position: absolute;
+      transform: none !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+  /* ── one-shot RGB split on the name ── */
+  .glitch {
+    position: relative;
+    display: inline-block;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .glitch::before {
+      color: var(--color-accent);
+      animation: glitch-r 0.52s steps(2, end) 0.45s 1;
+    }
+    .glitch::after {
+      color: var(--color-good);
+      animation: glitch-g 0.52s steps(2, end) 0.45s 1;
+    }
+  }
+
+  @keyframes glitch-r {
+    0%, 100% { opacity: 0; transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+    12% { opacity: 0.85; transform: translate(-3px, -1px); clip-path: inset(0 0 66% 0); }
+    34% { opacity: 0.7; transform: translate(2px, 1px); clip-path: inset(58% 0 0 0); }
+    58% { opacity: 0.8; transform: translate(-2px, 0); clip-path: inset(32% 0 40% 0); }
+    80% { opacity: 0.6; transform: translate(1px, -1px); clip-path: inset(80% 0 4% 0); }
+  }
+
+  @keyframes glitch-g {
+    0%, 100% { opacity: 0; transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+    16% { opacity: 0.7; transform: translate(3px, 1px); clip-path: inset(70% 0 8% 0); }
+    40% { opacity: 0.8; transform: translate(-2px, -1px); clip-path: inset(20% 0 55% 0); }
+    64% { opacity: 0.6; transform: translate(2px, 1px); clip-path: inset(48% 0 22% 0); }
+    86% { opacity: 0.7; transform: translate(-1px, 0); clip-path: inset(4% 0 80% 0); }
+  }
+</style>

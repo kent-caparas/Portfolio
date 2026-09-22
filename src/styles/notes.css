@@ -1,0 +1,117 @@
+/* Paper notes, shared by the home board and the wall page. Colors come from theme tokens only. */
+
+.wall-note {
+  width: 230px;
+  padding: 14px 16px 12px;
+  border: 2px solid var(--note-edge);
+  border-radius: 0;
+  background: var(--note-hello);
+  color: var(--note-ink);
+  /* one hard step, no blur, like an old game box */
+  box-shadow: 4px 4px 0 var(--note-edge);
+}
+
+.wall-note.is-dragging {
+  box-shadow: 8px 8px 0 var(--note-edge);
+}
+
+/* night: a menu window, light frame with a page colored outline */
+[data-theme='dusk'] .wall-note {
+  border-radius: 6px;
+  box-shadow: 0 0 0 3px var(--color-bg);
+}
+
+[data-theme='dusk'] .wall-note.is-dragging {
+  box-shadow:
+    0 0 0 3px var(--color-bg),
+    0 0 0 5px var(--note-edge);
+}
+
+.wall-note[data-topic='feedback'] {
+  background: var(--note-feedback);
+}
+
+.wall-note[data-topic='idea'] {
+  background: var(--note-idea);
+}
+
+.wall-note[data-topic='collab'] {
+  background: var(--note-collab);
+}
+
+.wall-note[data-topic='hello'] {
+  background: var(--note-hello);
+}
+
+.wall-note__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.wall-note__name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-variant: small-caps;
+  letter-spacing: 0.03em;
+  color: var(--note-ink);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.wall-note__topic {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--note-ink-faint);
+  white-space: nowrap;
+}
+
+.wall-note__body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--note-ink);
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;
+}
+
+.wall-note__time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--note-ink-faint);
+}
+
+/* blank "new note" affordance */
+.wall-note--new {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 96px;
+  background: var(--color-bg) !important;
+  border: 2px dashed var(--color-accent);
+  box-shadow: none;
+}
+
+.wall-note--new:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.wall-note--new__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--color-accent);
+}
+
+.wall-note--new__hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-ink-faint);
+}

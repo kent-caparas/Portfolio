@@ -1,4 +1,5 @@
 import type { PublicNote } from '@/server/wall/types';
+import { relativeTime } from '@/lib/relative-time';
 
 export interface NotePosition {
   x: number;
@@ -12,20 +13,6 @@ interface NoteProps {
   position: NotePosition;
   dragging: boolean;
   onPointerDown: (event: PointerEvent, id: string) => void;
-}
-
-function relativeTime(iso: string): string {
-  const then = new Date(iso).getTime();
-  if (Number.isNaN(then)) return '';
-  const diff = Date.now() - then;
-  const mins = Math.round(diff / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.round(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.round(hours / 24);
-  if (days < 30) return `${days}d ago`;
-  return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
 
 export default function Note({ note, position, dragging, onPointerDown }: NoteProps) {

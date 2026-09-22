@@ -1,17 +1,9 @@
 ---
-import '@fontsource-variable/source-serif-4/index.css';
-import '@fontsource-variable/source-serif-4/wght-italic.css';
-import '@fontsource/ibm-plex-sans/400.css';
-import '@fontsource/ibm-plex-sans/500.css';
-import '@fontsource/ibm-plex-sans/600.css';
-import '@fontsource/ibm-plex-mono/400.css';
-import '@fontsource/ibm-plex-mono/500.css';
-import 'lenis/dist/lenis.css';
+import '@/styles/fonts.css';
 import '@/styles/global.css';
-import '@/styles/atmosphere.css';
-import Globe from '@/features/globe/components/Globe.astro';
-import ScrollScene from '@/features/motion/components/ScrollScene.tsx';
-import Hud from '@/features/hud/components/Hud.astro';
+import '@/styles/motion.css';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
 
 interface Props {
   title?: string;
@@ -19,8 +11,8 @@ interface Props {
 }
 
 const {
-  title = 'kent caparas — logbook',
-  description = 'i build things, then i break them on purpose to see what falls out. a developer logbook of postmortems, teardowns, and field notes.',
+  title = 'kent caparas',
+  description = "i build things. use cases excite me. ai forward deployed developer at trelent, wiring private ai into the workflows quietly draining a team's hours.",
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -34,7 +26,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonical} />
 
-    {/* no-flash: resolve theme + prove JS before first paint */}
+    {/* resolve theme and prove JS before first paint */}
     <script is:inline>
       (() => {
         const root = document.documentElement;
@@ -46,6 +38,28 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         } catch (_) {}
       })();
     </script>
+
+    {/* prerender same-site pages on hover so view transitions feel instant */}
+    <script type="speculationrules" is:inline>
+      {
+        "prerender": [
+          {
+            "where": {
+              "and": [
+                { "href_matches": "/*" },
+                { "not": { "href_matches": "/admin/*" } },
+                { "not": { "href_matches": "/api/*" } }
+              ]
+            },
+            "eagerness": "moderate"
+          }
+        ]
+      }
+    </script>
+
+    {/* the name and body text paint in their real faces, no swap flash */}
+    <link rel="preload" href="/fonts/basteleur/Basteleur-Bold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/karrik/Karrik-Regular.woff2" as="font" type="font/woff2" crossorigin />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -61,17 +75,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link
       rel="alternate"
       type="application/rss+xml"
-      title="kent caparas — logbook"
+      title="Kent Caparas, writing"
       href={new URL('rss.xml', Astro.site)}
     />
   </head>
   <body>
-    <Globe />
-    <div class="scanlines" aria-hidden="true"></div>
-    <Hud />
-    <div class="wrap">
+    <Header />
+    <main class="wrap">
       <slot />
-    </div>
-    <ScrollScene client:load />
+    </main>
+    <Footer />
   </body>
 </html>

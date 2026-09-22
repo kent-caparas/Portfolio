@@ -26,6 +26,11 @@ export function formatStamp(date: Date): string {
   return `${y}.${m}.${d}`;
 }
 
+/** Shared name so the row title morphs into the article heading. */
+export function postTransitionName(post: Post): string {
+  return `post-${post.id.replace(/[^a-z0-9-]/gi, '-')}`;
+}
+
 /** Human label for a tag enum value, e.g. "patch-notes" -> "patch notes". */
 export function formatTag(tag: Post['data']['tag']): string {
   return tag.replace(/-/g, ' ');

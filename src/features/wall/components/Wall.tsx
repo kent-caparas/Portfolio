@@ -3,6 +3,7 @@ import type { PublicNote } from '@/server/wall/types';
 import Note, { type NotePosition } from './Note';
 import NoteForm, { type SubmittedNote } from './NoteForm';
 import EmptyState from './EmptyState';
+import { clamp, hashStr, mulberry32 } from '@/lib/scatter';
 
 const NOTE_W = 230;
 const NOTE_H = 150;
@@ -14,31 +15,6 @@ const HOME = { x: PAD, y: PAD };
 interface Pos {
   x: number;
   y: number;
-}
-
-// Deterministic per-note layout: same id → same scatter. Manual positions
-// (drags + drops) override the deterministic base and survive recompute.
-function hashStr(input: string): number {
-  let h = 2166136261;
-  for (let i = 0; i < input.length; i++) {
-    h ^= input.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return h >>> 0;
-}
-
-function mulberry32(seed: number): () => number {
-  let a = seed;
-  return () => {
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-function clamp(v: number, lo: number, hi: number): number {
-  return Math.min(Math.max(v, lo), hi);
 }
 
 interface DragSession {
@@ -116,6 +92,8 @@ export default function Wall({ initialNotes }: WallProps) {
     return Math.max(rows * (NOTE_H + 48) + 80, 360);
   }, [width, notes.length]);
 
+  // Deterministic per-note layout: same id → same scatter. Manual positions
+  // (drags + drops) override the deterministic base and survive recompute.
   useEffect(() => {
     if (width <= 0) return;
     const maxX = Math.max(PAD, width - NOTE_W - PAD);
