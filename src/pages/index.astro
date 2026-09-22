@@ -4,13 +4,14 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/widgets/hero/Hero.astro';
 import Board from '@/features/board/components/Board.tsx';
 import { ABOUT_NOTES, LINK_NOTES, type BoardItem } from '@/features/board/lib/board-items';
-import { getFeaturedProjects, statusLabel } from '@/features/projects/lib/projects';
+import { getRecentProjects, getJobs, statusLabel, type Project } from '@/features/projects/lib/projects';
 import { formatStamp, getRecentPosts } from '@/features/blog/lib/posts';
 import portrait from '@/assets/portrait.jpg';
 import '@/styles/notes.css';
 import '@/features/board/board.css';
 
-const [projects, posts] = await Promise.all([getFeaturedProjects(), getRecentPosts(3)]);
+// about, day job and links always stay, only writing and projects rotate
+const [jobs, projects, posts] = await Promise.all([getJobs(), getRecentProjects(3), getRecentPosts(3)]);
 const photo = await getImage({ src: portrait, width: 480, widths: [240, 480], format: 'webp' });
 
 function readingLabel(minutes: number | undefined): string | undefined {
@@ -41,7 +42,7 @@ const postNotes: BoardItem[] = posts.map((post) => ({
   href: `/blog/${post.id}`,
 }));
 
-const projectNotes: BoardItem[] = projects.map((project) => ({
+const projectNote = (project: Project): BoardItem => ({
   id: `project-${project.id}`,
   kind: 'project',
   word: project.data.name.toLowerCase(),
@@ -50,9 +51,16 @@ const projectNotes: BoardItem[] = projects.map((project) => ({
   title: project.data.name,
   body: project.data.description,
   href: `/projects/${project.id}`,
-}));
+});
 
-const items = [photoNote, ...ABOUT_NOTES, ...postNotes, ...projectNotes, ...LINK_NOTES];
+const items = [
+  photoNote,
+  ...ABOUT_NOTES,
+  ...jobs.map((job) => ({ ...projectNote(job), pinned: true })),
+  ...postNotes,
+  ...projects.map(projectNote),
+  ...LINK_NOTES,
+];
 const looseWords = items.flatMap(({ id, word }) => (word ? [{ id, word }] : []));
 ---
 
